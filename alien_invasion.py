@@ -10,12 +10,15 @@ def run_game():
     ai_settings = Settings()
 
     screen_size = ai_settings.screen_width, ai_settings.screen_height
-    bg_color = ai_settings.bg_color
+
     screen = pygame.display.set_mode(screen_size)
     pygame.display.set_caption("Alien Invasion")
-    screen.fill(bg_color)
+    screen.fill(ai_settings.bg_color)
 
-    ship = Ship(screen)
+    ship = Ship(ai_settings, screen)
+
+    # группа для хранения снарядов
+    projectiles = pygame.sprite.Group()
 
     # Рисование
     finished = False
@@ -24,8 +27,8 @@ def run_game():
     # while not gf.check_events():
 
     while not finished:
-        finished = gf.check_events(ship)
-        gf.update_screen(screen, ship, bg_color)
+        finished = gf.check_events(ai_settings, screen, ship, projectiles)
+        gf.update_screen(ai_settings, screen, ship, projectiles)
 
     print("Good bye!")
     pygame.quit()
