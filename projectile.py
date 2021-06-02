@@ -24,6 +24,5 @@ class Projectile(pygame.sprite.Sprite):
         self.y -= self.speed_factor
         self.rect.y = self.y
 
-
     def draw(self):
         pygame.draw.rect(self.screen, self.color, self.rect)

@@ -20,7 +20,8 @@ def check_keyup_events(event, ship):
 
 def check_events(ai_settings, screen, ship, projectiles):
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+        if event.type == pygame.QUIT or \
+                (event.type == pygame.KEYDOWN and event.key == pygame.K_q):
             return True
 
         elif event.type == pygame.KEYDOWN:
@@ -28,8 +29,6 @@ def check_events(ai_settings, screen, ship, projectiles):
 
         elif event.type == pygame.KEYUP:
             check_keyup_events(event, ship)
-
-    return False
 
 
 def update_screen(ai_settings, screen, ship, projectiles):

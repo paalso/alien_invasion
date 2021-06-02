@@ -23,7 +23,7 @@ def run_game():
     # Рисование
     finished = False
 
-    # Можно еще упростить
+    # Можно еще упростить ?
     # while not gf.check_events():
 
     while not finished:
