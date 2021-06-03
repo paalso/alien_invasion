@@ -31,7 +31,7 @@ def check_events(ai_settings, screen, ship, projectiles):
             check_keyup_events(event, ship)
 
 
-def update_screen(ai_settings, screen, ship, projectiles):
+def update_screen(ai_settings, screen, ship, projectiles, alien):
     screen.fill(ai_settings.bg_color)
     ship.update()
     for projectile in projectiles.sprites():
@@ -39,6 +39,7 @@ def update_screen(ai_settings, screen, ship, projectiles):
         projectile.draw()
     update_projectiles(projectiles)
     ship.blitme()
+    alien.draw()
     pygame.display.flip()
 
 

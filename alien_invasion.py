@@ -1,6 +1,7 @@
 import sys, pygame
 from settings import Settings
 from ship import Ship
+from alien import Alien
 import game_functions as gf
 
 def run_game():
@@ -17,6 +18,8 @@ def run_game():
 
     ship = Ship(ai_settings, screen)
 
+    alien = Alien(ai_settings, screen)
+
     # группа для хранения снарядов
     projectiles = pygame.sprite.Group()
 
@@ -28,7 +31,7 @@ def run_game():
 
     while not finished:
         finished = gf.check_events(ai_settings, screen, ship, projectiles)
-        gf.update_screen(ai_settings, screen, ship, projectiles)
+        gf.update_screen(ai_settings, screen, ship, projectiles, alien)
 
     print("Good bye!")
     pygame.quit()

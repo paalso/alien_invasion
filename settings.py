@@ -12,9 +12,13 @@ class Settings():
         self.ship_height = int(self.ship_width * 1.24)
         self.ship_speed_factor = 1.0
 
-        # Параметры пули
+        # Параметры снаряда
         self.projectile_speed_factor = 0.7 * self.ship_speed_factor
         self.projectile_length = 10
         self.projectile_width = 3
         self.projectile_color = 255, 255, 0
         self.bullets_allowed =  3
+
+        # Параметры alien ship
+        self.alien_ship_width = 75
+        self.alien_ship_height = int(self.alien_ship_width * 0.75)
