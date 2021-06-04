@@ -20,5 +20,5 @@ class Settings():
         self.bullets_allowed =  3
 
         # Параметры alien ship
-        self.alien_ship_width = 75
+        self.alien_ship_width = 50
         self.alien_ship_height = int(self.alien_ship_width * 0.75)

@@ -1,6 +1,6 @@
 import pygame
 
-class Alien():
+class Alien(pygame.sprite.Sprite):
     def __init__(self, ai_settings, screen):
         """Инициализирует инопланетный корабль и задает его начальную
         позицию."""

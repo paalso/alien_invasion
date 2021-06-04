@@ -1,7 +1,6 @@
 import sys, pygame
 from settings import Settings
 from ship import Ship
-from alien import Alien
 import game_functions as gf
 
 def run_game():
@@ -16,12 +15,11 @@ def run_game():
     pygame.display.set_caption("Alien Invasion")
     screen.fill(ai_settings.bg_color)
 
+    # создание корабля, группы пуль и пришельцев
     ship = Ship(ai_settings, screen)
-
-    alien = Alien(ai_settings, screen)
-
-    # группа для хранения снарядов
     projectiles = pygame.sprite.Group()
+    aliens = pygame.sprite.Group()
+    gf.create_fleet(ai_settings, screen, aliens)
 
     # Рисование
     finished = False
@@ -31,7 +29,7 @@ def run_game():
 
     while not finished:
         finished = gf.check_events(ai_settings, screen, ship, projectiles)
-        gf.update_screen(ai_settings, screen, ship, projectiles, alien)
+        gf.update_screen(ai_settings, screen, ship, projectiles, aliens)
 
     print("Good bye!")
     pygame.quit()
