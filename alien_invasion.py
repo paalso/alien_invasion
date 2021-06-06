@@ -1,5 +1,6 @@
 import sys, pygame
 from settings import Settings
+from background import Background
 from ship import Ship
 import game_functions as gf
 
@@ -16,6 +17,7 @@ def run_game():
     screen.fill(ai_settings.bg_color)
 
     # создание корабля, группы пуль и пришельцев
+    background = Background(ai_settings, screen)
     ship = Ship(ai_settings, screen)
     projectiles = pygame.sprite.Group()
     aliens = pygame.sprite.Group()
@@ -29,7 +31,7 @@ def run_game():
 
     while not finished:
         finished = gf.check_events(ai_settings, screen, ship, projectiles)
-        gf.update_screen(ai_settings, screen, ship, projectiles, aliens)
+        gf.update_screen(background, screen, ship, projectiles, aliens)
 
     print("Good bye!")
     pygame.quit()

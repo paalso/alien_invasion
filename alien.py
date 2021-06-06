@@ -9,7 +9,7 @@ class Alien(pygame.sprite.Sprite):
         self.screen = screen
 
         self.image = pygame.transform.scale(
-                pygame.image.load("images/aliens_ship.png"),
+                pygame.image.load(ai_settings.alien_ship_img),
                 (ai_settings.alien_ship_width, ai_settings.alien_ship_height))
         self.image.set_colorkey((0, 0, 0))
 

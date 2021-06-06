@@ -1,6 +1,7 @@
 import pygame
 from projectile import Projectile
 from alien import Alien
+from background import Background
 
 
 def check_keydown_events(event, ai_settings, screen, ship, projectiles):
@@ -32,16 +33,19 @@ def check_events(ai_settings, screen, ship, projectiles):
             check_keyup_events(event, ship)
 
 
-def update_screen(ai_settings, screen, ship, projectiles, aliens):
-    screen.fill(ai_settings.bg_color)
+def update_screen(background, screen, ship, projectiles, aliens):
+
+    background.blitme()
+
     ship.update()
+
     for projectile in projectiles.sprites():
         projectile.update()
         projectile.draw()
+
     update_projectiles(projectiles)
     ship.blitme()
     aliens.draw(screen)
-    #print(f'Aliens qty: {len(aliens)}')
     pygame.display.flip()
 
 
