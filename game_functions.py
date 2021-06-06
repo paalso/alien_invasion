@@ -41,6 +41,7 @@ def update_screen(ai_settings, screen, ship, projectiles, aliens):
     update_projectiles(projectiles)
     ship.blitme()
     aliens.draw(screen)
+    #print(f'Aliens qty: {len(aliens)}')
     pygame.display.flip()
 
 
@@ -59,33 +60,46 @@ def fire_projectile(ai_settings, screen, ship, projectiles):
 
 def create_fleet(ai_settings, screen, aliens):
 
-    aliens_number_in_row = get_aliens_number_in_row(
-            ai_settings.screen_width, ai_settings.alien_ship_width)
+    aliens_number_in_row = get_aliens_number_in_row(ai_settings)
 
-    distance_between_aliens = get_distance_between_aliens(
-            aliens_number_in_row,
-            ai_settings.screen_width, ai_settings.alien_ship_width)
+    distance_x_between_aliens = get_distance_x_between_aliens(
+            aliens_number_in_row, ai_settings)
 
-    for i in range(aliens_number_in_row):
-        create_alien(
-                ai_settings, screen, aliens, i, distance_between_aliens)
+    number_rows = get_number_rows(ai_settings)
 
-
-def get_aliens_number_in_row(screen_width, alien_ship_width):
-    return int(0.5 * (screen_width - alien_ship_width) / alien_ship_width)
+    for i in range(number_rows):
+        for j in range(aliens_number_in_row):
+            create_alien(
+                    ai_settings, screen, aliens,
+                    i, j, distance_x_between_aliens)
 
 
-def get_distance_between_aliens(aliens_number_in_row,
-                                screen_width, alien_ship_width):
-    return (screen_width - aliens_number_in_row * alien_ship_width) / \
+def get_aliens_number_in_row(ai_settings):
+    return int(0.5 * (
+            ai_settings.screen_width - ai_settings.alien_ship_width) \
+            / ai_settings.alien_ship_width)
+
+
+def get_distance_x_between_aliens(aliens_number_in_row, ai_settings):
+    return (ai_settings.screen_width - \
+            aliens_number_in_row * ai_settings.alien_ship_width) / \
             (aliens_number_in_row + 1)
 
 
+def get_number_rows(ai_settings):
+    available_y_space = ai_settings.screen_height - ai_settings.ship_height - \
+                        3 * ai_settings.alien_ship_height
+    return available_y_space // (2 * ai_settings.alien_ship_height)
+
+
 def create_alien(
-        ai_settings, screen, aliens, alien_number, distance_between_aliens):
+            ai_settings, screen, aliens,
+            row_number, alien_number, distance_between_aliens):
 
     alien = Alien(ai_settings, screen)
+    alien.y = (2 * row_number + 1) * ai_settings.alien_ship_height
     alien.x =(alien_number + 1) * distance_between_aliens + \
             alien_number * ai_settings.alien_ship_width
     alien.rect.x = alien.x
+    alien.rect.y = alien.y
     aliens.add(alien)

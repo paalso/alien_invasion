@@ -17,7 +17,7 @@ class Alien(pygame.sprite.Sprite):
         self.rect.x = ai_settings.alien_ship_width
         self.rect.y = ai_settings.alien_ship_height
         self.x = float(self.rect.x)     # сохранение точной позиции
-
+        self.y = float(self.rect.y)
 
     def draw(self): # или blitme?
         self.screen.blit(self.image, self.rect)
