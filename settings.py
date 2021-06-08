@@ -23,5 +23,7 @@ class Settings():
 
         # Параметры alien ship
         self.alien_ship_img = "images/aliens_ship.png"
-        self.alien_ship_width = 60
+        self.alien_ship_width = 75
         self.alien_ship_height = int(self.alien_ship_width * 0.75)
+        self.alien_speed_factor = 0.25
+        self.fleet_drop_speed = 10

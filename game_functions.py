@@ -44,6 +44,7 @@ def update_screen(background, screen, ship, projectiles, aliens):
         projectile.draw()
 
     update_projectiles(projectiles)
+    update_aliens(aliens)
     ship.blitme()
     aliens.draw(screen)
     pygame.display.flip()
@@ -107,3 +108,28 @@ def create_alien(
     alien.rect.x = alien.x
     alien.rect.y = alien.y
     aliens.add(alien)
+
+
+def update_aliens(aliens):
+    if check_aliens_screen_collision(aliens):
+        change_fleet_direction()
+    else:
+        restore_fleet()
+
+    aliens.update()
+
+
+def check_aliens_screen_collision(aliens):
+    for alien in aliens.sprites():
+        if alien.detect_screen_collision():
+            return True
+    return False
+
+
+def change_fleet_direction():
+    setattr(Alien, "fleet_direction", - Alien.fleet_direction)
+    setattr(Alien, "fleet_drop", True)
+
+
+def restore_fleet():
+    setattr(Alien, "fleet_drop", False)
