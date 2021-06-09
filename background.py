@@ -10,5 +10,5 @@ class Background:
             (ai_settings.screen_width, ai_settings.screen_height))
         self.screen = screen
 
-    def blitme(self):
+    def draw(self):
         self.screen.blit(self.image, (0, 0))

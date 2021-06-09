@@ -10,7 +10,7 @@ def check_keydown_events(event, ai_settings, screen, ship, projectiles):
     if event.key == pygame.K_RIGHT:
         ship.moving_right = True
     if event.key == pygame.K_SPACE:
-        fire_projectile(ai_settings, screen, ship, projectiles)
+        projectiles.fire_projectile(ship)
 
 
 def check_keyup_events(event, ship):
@@ -35,31 +35,14 @@ def check_events(ai_settings, screen, ship, projectiles):
 
 def update_screen(background, screen, ship, projectiles, aliens):
 
-    background.blitme()
-
+    background.draw()
     ship.update()
 
-    for projectile in projectiles.sprites():
-        projectile.update()
-        projectile.draw()
-
-    update_projectiles(projectiles)
+    projectiles.draw()
+    projectiles.update()
     aliens.update()
 
     ship.draw()
     aliens.draw()
 
     pygame.display.flip()
-
-
-def update_projectiles(projectiles):
-    for projectile in projectiles.copy():
-        if projectile.rect.bottom <= 0:
-            projectiles.remove(projectile)
-            del projectile
-
-
-def fire_projectile(ai_settings, screen, ship, projectiles):
-    if len(projectiles) < ai_settings.bullets_allowed:
-        projectile = Projectile(ai_settings, screen, ship)
-        projectiles.add(projectile)

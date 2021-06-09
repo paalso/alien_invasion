@@ -3,6 +3,7 @@ from settings import Settings
 from background import Background
 from ship import Ship
 from aliens import Aliens
+from projectiles import Projectiles
 import game_functions as gf
 
 
@@ -17,7 +18,7 @@ def run_game():
     # создание корабля, группы пуль и пришельцев
     background = Background(ai_settings, screen)
     ship = Ship(ai_settings, screen)
-    projectiles = pygame.sprite.Group()
+    projectiles = Projectiles(ai_settings, screen)
     aliens = Aliens(ai_settings, screen)
 
     # Рисование

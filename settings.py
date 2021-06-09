@@ -20,7 +20,7 @@ class Settings():
         self.projectile_length = 10
         self.projectile_width = 3
         self.projectile_color = 255, 255, 0
-        self.bullets_allowed =  3
+        self.projectiles_allowed =  3
 
         # Параметры alien ship
         self.alien_ship_img = "images/aliens_ship.png"
