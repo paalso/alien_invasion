@@ -1,5 +1,6 @@
 import pygame
 
+
 class Ship():
     def __init__(self, ai_settings, screen):
         """Инициализирует корабль и задает его начальную позицию."""
@@ -22,7 +23,7 @@ class Ship():
         self.moving_left = False
         self.moving_right = False
 
-    def blitme(self):
+    def draw(self):
         """Рисует корабль в текущей позиции."""
         self.screen.blit(self.image, self.rect)
 

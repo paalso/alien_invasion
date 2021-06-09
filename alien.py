@@ -1,9 +1,9 @@
 import pygame
 
+
 class Alien(pygame.sprite.Sprite):
 
     fleet_direction = 1   # to the right by default
-    fleet_drop = False   # to the right by default
 
     def __init__(self, ai_settings, screen):
         """Инициализирует инопланетный корабль и задает его начальную
@@ -30,12 +30,8 @@ class Alien(pygame.sprite.Sprite):
         self.y = float(self.rect.y)
 
     def update(self):
-
         self.x += Alien.fleet_direction * self.ai_settings.alien_speed_factor
         self.rect.x = self.x
-
-        if Alien.fleet_drop:
-            self.rect.y += self.ai_settings.fleet_drop_speed
 
     def draw(self): # или blitme?
         self.screen.blit(self.image, self.rect)
@@ -43,4 +39,3 @@ class Alien(pygame.sprite.Sprite):
     def detect_screen_collision(self):
         return self.rect.right >= self.sc_rect.right or \
                 self.rect.left <= self.sc_rect.left
-
