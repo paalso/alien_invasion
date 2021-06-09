@@ -16,9 +16,10 @@ class Settings():
         self.ship_speed_factor = 1.5
 
         # Параметры снаряда
+        self.projectile_img = "images/projectile.png"
         self.projectile_speed_factor = 0.7 * self.ship_speed_factor
-        self.projectile_length = 10
-        self.projectile_width = 3
+        self.projectile_length = 23
+        self.projectile_width = 7
         self.projectile_color = 255, 255, 0
         self.projectiles_allowed =  3
 

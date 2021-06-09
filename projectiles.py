@@ -22,12 +22,8 @@ class Projectiles():
             if projectile.rect.bottom <= 0:
                 self.projectiles.remove(projectile)
 
-##    def draw(self):
-##        self.projectiles.draw(self.screen)
-
     def draw(self):
-        for projectile in self.projectiles:
-            projectile.draw()
+        self.projectiles.draw(self.screen)
 
     def fire_projectile(self, ship):
         if len(self.projectiles) < self.ai_settings.projectiles_allowed:

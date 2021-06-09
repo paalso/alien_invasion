@@ -9,6 +9,11 @@ class Projectile(pygame.sprite.Sprite):
         self.speed_factor = ai_settings.projectile_speed_factor
         self.color = ai_settings.projectile_color
 
+        self.image = pygame.transform.scale(
+                pygame.image.load(ai_settings.projectile_img),
+                (ai_settings.projectile_width, ai_settings.projectile_length))
+        self.rect = self.image.get_rect()
+
         # сначала создаем снаряд в позиции (0, 0)
         self.rect = pygame.Rect((0, 0,
                 ai_settings.projectile_width, ai_settings.projectile_length))
@@ -25,4 +30,4 @@ class Projectile(pygame.sprite.Sprite):
         self.rect.y = self.y
 
     def draw(self):
-        pygame.draw.rect(self.screen, self.color, self.rect)
+        self.screen.blit(self.image, self.rect)
