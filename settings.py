@@ -17,6 +17,8 @@ class Settings():
 
         # Параметры снаряда
         self.projectile_img = "images/projectile.png"
+        self.projectile_launch_sound = "sounds/launch.mp3"
+        self.projectile_launch_sound = "sounds/launch1.mp3"
         self.projectile_speed_factor = 0.7 * self.ship_speed_factor
         self.projectile_length = 20
         self.projectile_width = 8
@@ -25,6 +27,7 @@ class Settings():
 
         # Параметры alien ship
         self.alien_ship_img = "images/aliens_ship.png"
+        self.alien_bang_sound = "sounds/bang.mp3"
         self.alien_ship_width = 75
         self.alien_ship_height = int(self.alien_ship_width * 0.75)
         self.alien_speed_factor = 0.25

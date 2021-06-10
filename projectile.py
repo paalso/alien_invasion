@@ -28,6 +28,11 @@ class Projectile(pygame.sprite.Sprite):
         # позиция снаряда хранится в вещественном формате - почему и зачем?
         self.y = float(self.rect.y)
 
+        # звук снаряда
+        # self.launch_sound = pygame.mixer.Sound(ai_settings.projectile_launch_sound)
+        pygame.mixer.Sound(ai_settings.projectile_launch_sound).play()
+
+
     def update(self):
         self.y -= self.speed_factor
         self.rect.y = self.y

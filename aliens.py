@@ -16,11 +16,14 @@ class Aliens():
         self.number = len(self.fleet)
         self.fleet_drop_speed = self.ai_settings.fleet_drop_speed
 
+        self.bang_sound = pygame.mixer.Sound(self.ai_settings.alien_bang_sound)
+
     def __iter__(self):
         return iter(self.fleet)
 
     def remove(self, alien):
         self.fleet.remove(alien)
+        self.bang_sound.play()
 
     def update(self):
         if self.__check_aliens_screen_collision():
