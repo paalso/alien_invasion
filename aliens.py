@@ -13,6 +13,12 @@ class Aliens():
         self.fleet = pygame.sprite.Group()
         self.__create_fleet()
 
+    def __iter__(self):
+        return iter(self.fleet)
+
+    def remove(self, alien):
+        self.fleet.remove(alien)
+
     def update(self):
         if self.__check_aliens_screen_collision():
             self.__change_fleet_direction()
@@ -33,7 +39,8 @@ class Aliens():
         setattr(Alien, "fleet_direction", - Alien.fleet_direction)
 
         for alien in self.fleet.sprites():
-            alien.rect.y += self.ai_settings.fleet_drop_speed
+            alien.y += self.ai_settings.fleet_drop_speed
+            alien.rect.y = alien.y
 
     def __create_fleet(self):
         aliens_number_in_row = self.__get_aliens_number_in_row()

@@ -39,7 +39,7 @@ def update_screen(background, screen, ship, projectiles, aliens):
     ship.update()
 
     projectiles.draw()
-    projectiles.update()
+    projectiles.update(aliens)
     aliens.update()
 
     ship.draw()

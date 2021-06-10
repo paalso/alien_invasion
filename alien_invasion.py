@@ -18,8 +18,8 @@ def run_game():
     # создание корабля, группы пуль и пришельцев
     background = Background(ai_settings, screen)
     ship = Ship(ai_settings, screen)
-    projectiles = Projectiles(ai_settings, screen)
     aliens = Aliens(ai_settings, screen)
+    projectiles = Projectiles(ai_settings, screen)
 
     # Рисование
     finished = False
