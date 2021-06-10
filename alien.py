@@ -4,6 +4,7 @@ import pygame
 class Alien(pygame.sprite.Sprite):
 
     fleet_direction = 1   # to the right by default
+    speed_increading_factor = 1
 
     def __init__(self, ai_settings, screen):
         """Инициализирует инопланетный корабль и задает его начальную
@@ -20,7 +21,7 @@ class Alien(pygame.sprite.Sprite):
                 (self.ai_settings.alien_ship_width,
                 self.ai_settings.alien_ship_height))
 
-        # fix it! : load true png with transparent background
+        # FIX IT! : load true png with transparent background
         self.image.set_colorkey((0, 0, 0))
 
         self.rect = self.image.get_rect()
@@ -30,7 +31,8 @@ class Alien(pygame.sprite.Sprite):
         self.y = float(self.rect.y)
 
     def update(self):
-        self.x += Alien.fleet_direction * self.ai_settings.alien_speed_factor
+        self.x += Alien.fleet_direction * Alien.speed_increading_factor * \
+                self.ai_settings.alien_speed_factor
         self.rect.x = self.x
 
     def draw(self): # или blitme?

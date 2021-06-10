@@ -1,8 +1,11 @@
 import pygame
 
 class Projectile(pygame.sprite.Sprite):
+    counter = 0
+
     def __init__(self, ai_settings, screen, ship):
         super().__init__()
+        Projectile.counter += 1
 
         self.screen = screen
         self.ship = ship

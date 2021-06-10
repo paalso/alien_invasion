@@ -13,6 +13,9 @@ class Aliens():
         self.fleet = pygame.sprite.Group()
         self.__create_fleet()
 
+        self.number = len(self.fleet)
+        self.fleet_drop_speed = self.ai_settings.fleet_drop_speed
+
     def __iter__(self):
         return iter(self.fleet)
 
@@ -39,7 +42,7 @@ class Aliens():
         setattr(Alien, "fleet_direction", - Alien.fleet_direction)
 
         for alien in self.fleet.sprites():
-            alien.y += self.ai_settings.fleet_drop_speed
+            alien.y += self.fleet_drop_speed
             alien.rect.y = alien.y
 
     def __create_fleet(self):
