@@ -20,7 +20,6 @@ def run_game():
     aliens = Aliens(ai_settings, screen)
     projectiles = Projectiles(ai_settings, screen, aliens)
     ship = Ship(ai_settings, screen)
-    print(aliens.number)
 
     # Рисование
     finished = False

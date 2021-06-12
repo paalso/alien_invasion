@@ -17,11 +17,10 @@ class Settings():
 
         # Параметры снаряда
         self.projectile_img = "images/projectile.png"
-        self.projectile_launch_sound = "sounds/launch.mp3"
         self.projectile_launch_sound = "sounds/launch1.mp3"
         self.projectile_speed_factor = 0.7 * self.ship_speed_factor
-        self.projectile_length = 20
-        self.projectile_width = 8
+        self.projectile_length = 15
+        self.projectile_width = 5
         self.projectile_color = 255, 255, 0
         self.projectiles_allowed = 3
 
@@ -32,8 +31,11 @@ class Settings():
         self.alien_ship_height = int(self.alien_ship_width * 0.75)
         self.alien_speed_factor = 0.25
         self.fleet_drop_speed = 10
-        # фактор увеличения скорости к моменту, когда остается жив
-        # последний alien ship
+        # факторы увеличения скоростей (горизонтальной и вериткальной)
+        # смещения к моменту, когда остается жив последний alien ship
         self.drop_speed_increading_factor = 2
         self.alien_speed_increading_factor  = 2
-
+        # факторы увеличения начальных скоростей
+        # (горизонтальной и вериткальной) следующей волны
+        self.new_wave_drop_speed_increading_factor = 1.25
+        self.new_wave_alien_speed_increading_factor  = 1.25

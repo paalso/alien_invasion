@@ -26,21 +26,11 @@ class Projectiles():
         return iter(self.projectiles)
 
     def update(self, aliens):
-        self.projectiles.update()
-        for projectile in self.projectiles.copy():
-            if projectile.rect.bottom <= 0:
-                self.projectiles.remove(projectile)
+        if len(aliens) == 0:
+            self.__start_new_level(aliens)
 
-            for alien in aliens:
-                if projectile.rect.colliderect(alien.rect):
-                    self.projectiles.remove(projectile)
-                    aliens.remove(alien)
-                    aliens.fleet_drop_speed *= \
-                            self.drop_speed_increasing_factor_per_alien
-                    setattr(Alien, "speed_increading_factor",
-                            Alien.speed_increading_factor * \
-                            self.speed_increasing_factor_per_alien)
-                    break
+        self.projectiles.update()
+        self.__check_bullet_alien_collisions(aliens)
 
     def draw(self):
         self.projectiles.draw(self.screen)
@@ -50,4 +40,25 @@ class Projectiles():
             projectile = Projectile(self.ai_settings, self.screen, ship)
             self.projectiles.add(projectile)
 
+    def __start_new_level(self, aliens):
+        print("Another aliens wave destoyed!!!")
+        self.projectiles.empty()
+        pygame.time.delay(2500)
+        aliens.create_fleet()
+        # Увеличение начальной скорости у следующей волны
 
+    def __check_bullet_alien_collisions(self, aliens):
+        for projectile in self.projectiles.copy():
+            if projectile.rect.bottom <= 0:
+                self.projectiles.remove(projectile)
+
+            for alien in aliens:
+                if projectile.rect.colliderect(alien.rect):
+
+                    self.projectiles.remove(projectile)
+                    aliens.remove(alien)
+                    aliens.fleet_drop_speed *= \
+                            self.drop_speed_increasing_factor_per_alien
+                    Alien.speed_increading_factor *= \
+                            self.speed_increasing_factor_per_alien
+                    break

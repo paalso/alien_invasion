@@ -2,6 +2,7 @@ import pygame
 
 
 class Alien(pygame.sprite.Sprite):
+    counter = 0
 
     fleet_direction = 1   # to the right by default
     speed_increading_factor = 1
@@ -10,6 +11,7 @@ class Alien(pygame.sprite.Sprite):
         """Инициализирует инопланетный корабль и задает его начальную
         позицию."""
         super().__init__()
+        Alien.counter += 1
 
         self.screen = screen
         self.sc_rect = self.screen.get_rect()
