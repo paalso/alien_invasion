@@ -36,8 +36,10 @@ class AlienInvasion(Game):
         self.objects.append(self.aliens)
 
     def create_projectiles(self):
-        self.projectiles = Projectiles(self.settings, self.screen, self.ship, self.aliens)
-        self.keydown_handlers[pygame.K_SPACE].append(self.projectiles.handle_keydown)
+        self.projectiles = Projectiles(
+                self.settings, self.screen, self.ship, self.aliens)
+        self.keydown_handlers[pygame.K_SPACE].append(
+                self.projectiles.handle_keydown)
         self.objects.append(self.projectiles)
 
 

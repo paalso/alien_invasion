@@ -12,8 +12,10 @@ class Projectile(GameObject, pygame.sprite.Sprite):
         self.speed = (0, -settings.projectile_speed)
 
         self.image = pygame.transform.scale(
-                pygame.image.load(self.settings.projectile_img),
-                (self.settings.projectile_width, self.settings.projectile_length))
+                pygame.image.load(
+                    self.settings.projectile_img),
+                    (self.settings.projectile_width,
+                    self.settings.projectile_length))
         self.rect = self.image.get_rect()
 
         self.rect.centerx = ship.centerx
