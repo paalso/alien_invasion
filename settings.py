@@ -17,7 +17,7 @@ class Settings():
 
         # Projectile parameters
         self.projectile_img = "images/projectile.png"
-        self.projectile_launch_sound = "sounds/launch1.mp3"
+        self.projectile_launch_sound = "sounds/launch.mp3"
         self.projectile_speed = 0.7 * self.ship_speed
         self.projectile_length = 15
         self.projectile_width = 5
@@ -27,6 +27,7 @@ class Settings():
         # Alien Ship parameters
         self.alien_ship_img = "images/aliens_ship.png"
         self.alien_bang_sound = "sounds/bang.mp3"
+        self.moves_per_bang_frame = 3
         self.alien_ship_width = 75
         self.alien_ship_height = int(self.alien_ship_width * 0.75)
         self.alien_speed = 0.20 * self.ship_speed
@@ -37,5 +38,5 @@ class Settings():
         self.alien_speed_increase_factor  = 2
         # факторы увеличения начальных скоростей
         # (горизонтальной и вериткальной) следующей волны
-        self.new_wave_drop_speed_increase_factor = 1.25
-        self.new_wave_alien_speed_increase_factor  = 1.25
+        self.new_wave_drop_speed_increase_factor = 1.20
+        self.new_wave_alien_speed_increase_factor  = 1.20

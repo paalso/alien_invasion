@@ -34,7 +34,6 @@ class Projectiles(GameGroupObject):
         super().update()
         self.__check_bullet_alien_collisions()      # aliens
 
-
     def __check_bullet_alien_collisions(self):
         for projectile in self.items.copy():
             if projectile.rect.bottom <= 0:
@@ -44,7 +43,10 @@ class Projectiles(GameGroupObject):
                 if projectile.rect.colliderect(alien.rect):
 
                     self.items.remove(projectile)
-                    self.aliens.remove(alien)
+                    if alien.is_hit:
+                        continue
+
+                    alien.hit()
                     self.aliens.fleet_drop_speed *= \
                             self.drop_speed_increase_factor_per_alien
                     Alien.speed_increase_factor *= \

@@ -17,7 +17,7 @@ class Aliens(GameGroupObject):
 
     def remove(self, alien):
         super().remove(alien)
-        self.bang_sound.play()
+        #self.bang_sound.play()
 
     def create_fleet(self):
         self.counter += 1
@@ -32,11 +32,14 @@ class Aliens(GameGroupObject):
                 self.__create_alien(i, j, distance_x_between_aliens)
 
     def update(self):
+        if len(self) == 0:
+            self.__start_new_level()
+
         if self.__check_aliens_screen_collision():
             self.__change_fleet_direction()
+
+        self.__remove_annihilated_aliens()
         self.items.update()
-##        if pygame.sprite.spritecollideany(self.ship, self.items):
-##            print("Ship Hit!!!")
 
     def __create_alien(self, row_number, alien_number, distance_between_aliens):
         alien = Alien(self.settings, self.screen)
@@ -70,6 +73,11 @@ class Aliens(GameGroupObject):
             if alien.detect_screen_collision():
                 return True
 
+    def __remove_annihilated_aliens(self):
+        for alien in self.items.copy():
+            if alien.is_annihilated:
+                self.items.remove(alien)
+
     def __change_fleet_direction(self):
 
         # интересно, насколько некошерно так делать?
@@ -78,3 +86,10 @@ class Aliens(GameGroupObject):
         for alien in self.items.sprites():
             alien.y += self.fleet_drop_speed
             alien.rect.y = alien.y
+
+    def __start_new_level(self):
+#        print("Another aliens wave destoyed!!!")
+#        self.projectiles.empty()
+        pygame.time.delay(2500)
+        self.create_fleet()
+        # Увеличение начальной скорости у следующей волны
