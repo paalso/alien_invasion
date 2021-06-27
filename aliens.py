@@ -8,7 +8,10 @@ class Aliens(GameGroupObject):
 
     def __init__(self, settings, screen, ship):
         super().__init__(settings, screen)
+<<<<<<< HEAD
         self.counter = 0
+=======
+>>>>>>> cda486f8e13a9ad13d4aa1a40230af30a2ba9e82
         self.ship = ship
         self.create_fleet()
         self.number = len(self.items)
@@ -20,7 +23,10 @@ class Aliens(GameGroupObject):
         self.bang_sound.play()
 
     def create_fleet(self):
+<<<<<<< HEAD
         self.counter += 1
+=======
+>>>>>>> cda486f8e13a9ad13d4aa1a40230af30a2ba9e82
         aliens_number_in_row = self.__get_aliens_number_in_row()
         distance_x_between_aliens = \
                 self.__get_distance_x_between_aliens(aliens_number_in_row)

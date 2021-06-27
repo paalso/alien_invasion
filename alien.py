@@ -24,6 +24,7 @@ class Alien(GameObject, pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = self.settings.alien_ship_width
         self.rect.y = self.settings.alien_ship_height
+<<<<<<< HEAD
         self.x = float(self.rect.x)     # сохранение точной позиции
         self.y = float(self.rect.y)
 
@@ -31,6 +32,13 @@ class Alien(GameObject, pygame.sprite.Sprite):
         self.x += Alien.fleet_direction * Alien.speed_increase_factor * \
                 self.settings.alien_speed
         self.rect.x = self.x
+=======
+        print(Alien.counter)
+
+    def update(self):
+        self.rect.x += Alien.fleet_direction * Alien.speed_increase_factor * \
+                self.settings.alien_speed
+>>>>>>> cda486f8e13a9ad13d4aa1a40230af30a2ba9e82
 
     def draw(self):
         self.screen.blit(self.image, self.rect)
