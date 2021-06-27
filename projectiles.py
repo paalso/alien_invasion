@@ -1,64 +1,52 @@
 import pygame
+
+from game_group_object import GameGroupObject
 from ship import Ship
 from projectile import Projectile
 from alien import Alien
 
 
-class Projectiles():
+class Projectiles(GameGroupObject):
 
-    def __init__(self, ai_settings, screen, aliens):
-        super().__init__()
+    def __init__(self, settings, screen, ship, aliens):
+        super().__init__(settings, screen)
+        self.ship = ship
+        self.aliens = aliens
 
-        self.screen = screen
-        self.ai_settings = ai_settings
-
-        self.projectiles = pygame.sprite.Group()
-
-        self.drop_speed_increasing_factor_per_alien = \
-                self.ai_settings.drop_speed_increading_factor ** \
+        self.drop_speed_increase_factor_per_alien = \
+                self.settings.drop_speed_increase_factor ** \
                 (1 / aliens.number)
 
-        self.speed_increasing_factor_per_alien = \
-                self.ai_settings.alien_speed_increading_factor ** \
+        self.speed_increase_factor_per_alien = \
+                self.settings.alien_speed_increase_factor ** \
                 (1 / aliens.number)
-
-    def __iter__(self):
-        return iter(self.projectiles)
-
-    def update(self, aliens):
-        if len(aliens) == 0:
-            self.__start_new_level(aliens)
-
-        self.projectiles.update()
-        self.__check_bullet_alien_collisions(aliens)
-
-    def draw(self):
-        self.projectiles.draw(self.screen)
 
     def fire_projectile(self, ship):
-        if len(self.projectiles) < self.ai_settings.projectiles_allowed:
-            projectile = Projectile(self.ai_settings, self.screen, ship)
-            self.projectiles.add(projectile)
+        if len(self.items) < self.settings.projectiles_allowed:
+            projectile = Projectile(self.settings, self.screen, ship)
+            self.items.add(projectile)
 
-    def __start_new_level(self, aliens):
-        print("Another aliens wave destoyed!!!")
-        self.projectiles.empty()
-        pygame.time.delay(2500)
-        aliens.create_fleet()
-        # Увеличение начальной скорости у следующей волны
+    def handle_keydown(self, key):
+        if key == pygame.K_SPACE:
+            self.fire_projectile(self.ship)
 
-    def __check_bullet_alien_collisions(self, aliens):
-        for projectile in self.projectiles.copy():
+    def update(self):
+        super().update()
+        self.__check_bullet_alien_collisions()      # aliens
+
+
+    def __check_bullet_alien_collisions(self):
+        for projectile in self.items.copy():
             if projectile.rect.bottom <= 0:
-                self.projectiles.remove(projectile)
+                self.items.remove(projectile)
 
-            for alien in aliens:
+            for alien in self.aliens:
                 if projectile.rect.colliderect(alien.rect):
 
-                    self.projectiles.remove(projectile)
-                    aliens.remove(alien)
-                    aliens.fleet_drop_speed *= \
-                            self.drop_speed_increasing_factor_per_alien
-                    Alien.speed_increading_factor *= \
-                            self.speed_increasing_factor_per_alien
+                    self.items.remove(projectile)
+                    self.aliens.remove(alien)
+                    self.aliens.fleet_drop_speed *= \
+                            self.drop_speed_increase_factor_per_alien
+                    Alien.speed_increase_factor *= \
+                            self.speed_increase_factor_per_alien
                     break

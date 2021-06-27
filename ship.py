@@ -1,37 +1,38 @@
 import pygame
+from game_object import GameObject
 
 
-class Ship():
-    def __init__(self, ai_settings, screen):
-        """Инициализирует корабль и задает его начальную позицию."""
-        self.ai_settings = ai_settings
-        self.screen = screen
+class Ship(GameObject):
+    def __init__(self, settings, screen):
 
-        self.sc_rect = self.screen.get_rect()
+        super().__init__(settings, screen)
 
         self.image = pygame.transform.scale(
-                pygame.image.load(ai_settings.ship_img),
-                (self.ai_settings.ship_width, self.ai_settings.ship_height))
-
+                pygame.image.load(settings.ship_img),
+                (self.settings.ship_width, self.settings.ship_height))
         self.rect = self.image.get_rect()
 
         self.rect.centerx = self.sc_rect.centerx
         self.rect.bottom = self.sc_rect.bottom
-        self.centerx = float(self.rect.centerx)
 
-        # флаги движения
         self.moving_left = False
         self.moving_right = False
 
-    def draw(self):
-        """Рисует корабль в текущей позиции."""
-        self.screen.blit(self.image, self.rect)
+    def handle_keydown(self, key):
+        if key == pygame.K_LEFT:
+            self.moving_left = True
+        if key == pygame.K_RIGHT:
+            self.moving_right = True
+
+    def handle_keyup(self, key):
+        if key == pygame.K_LEFT:
+            self.moving_left = False
+        if key == pygame.K_RIGHT:
+            self.moving_right = False
 
     def update(self):
-        shift = self.ai_settings.ship_speed_factor
-        if self.moving_right and self.rect.right < self.sc_rect.right:
-            self.centerx += shift
-        if self.moving_left and self.rect.left > self.sc_rect.left:
-            self.centerx -= shift
-
-        self.rect.centerx = self.centerx
+        shift = self.settings.ship_speed
+        if self.moving_right and self.right < self.sc_rect.right:
+            self.move(shift, 0)
+        if self.moving_left and self.left > self.sc_rect.left:
+            self.move(-shift, 0)
