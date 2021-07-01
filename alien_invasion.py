@@ -18,6 +18,7 @@ class AlienInvasion(Game):
 
         self.is_game_running = True
         self.state = "start"    # "game", "pause", "finish"
+        self.keydown_handlers[pygame.K_c].append(self.handle_keydown)
         self.keydown_handlers[pygame.K_p].append(self.handle_keydown)
         self.keyup_handlers[pygame.K_s].append(self.handle_keyup)
 
@@ -26,13 +27,13 @@ class AlienInvasion(Game):
             self.__start_game()
 
     def handle_keydown(self, key):
-        if key == pygame.K_p:
-            if self.state == "game":
-                self.state = "pause"
-                self.__draw_menu()
-            elif self.state == "pause":
-                self.state = "game"
-                self.__remove_menu()
+        if self.state == "game" and key == pygame.K_p:
+            self.state = "pause"
+            self.__create_on_play_button("CONTINUE")
+
+        elif self.state == "pause" and key in (pygame.K_c, pygame.K_p):
+            self.state = "game"
+            self.__remove_menu()
 
     def create_objects(self):
         self.create_background()
@@ -42,20 +43,7 @@ class AlienInvasion(Game):
         self.create_projectiles()
 
     def create_menu(self):  # ?!
-
-        def on_play(button):
-            self.__start_game()
-
-        start_button = Button(self.settings, self.screen,
-                *self.settings.button_position, "START",
-                on_click=on_play, centralized=True, text_centralize=True)
-        self.menu_buttons.append(start_button)
-        self.objects.append(start_button)
-        self.mouse_handlers.append(start_button.handle_mouse_event )
-
-        continue_button = Button(self.settings, self.screen,
-                *self.settings.button_position, "CONTINUE",
-                on_click=on_play, centralized=True, text_centralize=True)
+        self.__create_on_play_button("START")
 
     def create_background(self):
         self.background = Background(self.settings, self.screen)
@@ -95,6 +83,21 @@ class AlienInvasion(Game):
 
         super().draw()
 
+    def __create_on_play_button(self, text):
+
+        def on_play(button):
+            self.__start_game()
+
+        on_play_button = Button(self.settings, self.screen,
+                *self.settings.button_position, text,
+                on_click=on_play, centralized=True, text_centralize=True)
+
+        self.menu_buttons.append(on_play_button)
+        self.objects.append(on_play_button)
+        self.mouse_handlers.append(on_play_button.handle_mouse_event )
+
+        return on_play_button
+
     def __draw_menu(self):
         for b in self.menu_buttons:
             b.draw()
@@ -102,6 +105,7 @@ class AlienInvasion(Game):
     def __remove_menu(self):
         for b in self.menu_buttons:
             self.objects.remove(b)
+        self.menu_buttons.clear()
 
     def __start_game(self):
         self.__remove_menu()
