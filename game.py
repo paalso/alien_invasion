@@ -21,6 +21,7 @@ class Game:
         self.keydown_handlers = defaultdict(list)
         self.keyup_handlers = defaultdict(list)
         self.mouse_handlers = []
+        self.quit_keys = []
 
     def update(self):
         for o in self.objects:
@@ -32,7 +33,8 @@ class Game:
 
     def handle_events(self):
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT \
+            or event.type == pygame.KEYDOWN and event.key in self.quit_keys:
                 pygame.quit()
                 sys.exit()
             elif event.type == pygame.KEYDOWN:

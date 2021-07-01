@@ -12,8 +12,8 @@ class Ship(GameObject):
                 (self.settings.ship_width, self.settings.ship_height))
         self.rect = self.image.get_rect()
 
-        self.rect.centerx = self.sc_rect.centerx
         self.rect.bottom = self.sc_rect.bottom
+        self.set_center()
 
         self.moving_left = False
         self.moving_right = False
@@ -36,3 +36,6 @@ class Ship(GameObject):
             self.move(shift, 0)
         if self.moving_left and self.left > self.sc_rect.left:
             self.move(-shift, 0)
+
+    def set_center(self):
+        self.rect.centerx = self.sc_rect.centerx

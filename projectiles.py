@@ -8,10 +8,11 @@ from alien import Alien
 
 class Projectiles(GameGroupObject):
 
-    def __init__(self, settings, screen, ship, aliens):
+    def __init__(self, settings, screen, ship, aliens, game):   # , game!
         super().__init__(settings, screen)
         self.ship = ship
         self.aliens = aliens
+        self.game = game
 
         self.drop_speed_increase_factor_per_alien = \
                 self.settings.drop_speed_increase_factor ** \
@@ -22,6 +23,8 @@ class Projectiles(GameGroupObject):
                 (1 / aliens.number)
 
     def fire_projectile(self, ship):
+        if not self.game.state == "game":   # !
+            return                          # !
         if len(self.items) < self.settings.projectiles_allowed:
             projectile = Projectile(self.settings, self.screen, ship)
             self.items.add(projectile)

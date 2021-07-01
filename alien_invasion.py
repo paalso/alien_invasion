@@ -1,6 +1,8 @@
 import sys, pygame
+import colors
 from settings import Settings
 from game import Game
+from button import Button
 from background import Background
 from ship import Ship
 from aliens import Aliens
@@ -10,13 +12,50 @@ from projectiles import Projectiles
 class AlienInvasion(Game):
     def __init__(self):
         super().__init__(Settings(), 'Alien Invasion')
+        self.quit_keys = [pygame.K_q]
+        self.menu_buttons = []  # ?
         self.create_objects()
+
+        self.is_game_running = True
+        self.state = "start"    # "game", "pause", "finish"
+        self.keydown_handlers[pygame.K_p].append(self.handle_keydown)
+        self.keyup_handlers[pygame.K_s].append(self.handle_keyup)
+
+    def handle_keyup(self, key):
+        if self.state == "start" and key == pygame.K_s:
+            self.__start_game()
+
+    def handle_keydown(self, key):
+        if key == pygame.K_p:
+            if self.state == "game":
+                self.state = "pause"
+                self.__draw_menu()
+            elif self.state == "pause":
+                self.state = "game"
+                self.__remove_menu()
 
     def create_objects(self):
         self.create_background()
+        self.create_menu()
         self.create_ship()
         self.create_aliens()
         self.create_projectiles()
+
+    def create_menu(self):  # ?!
+
+        def on_play(button):
+            self.__start_game()
+
+        start_button = Button(self.settings, self.screen,
+                *self.settings.button_position, "START",
+                on_click=on_play, centralized=True, text_centralize=True)
+        self.menu_buttons.append(start_button)
+        self.objects.append(start_button)
+        self.mouse_handlers.append(start_button.handle_mouse_event )
+
+        continue_button = Button(self.settings, self.screen,
+                *self.settings.button_position, "CONTINUE",
+                on_click=on_play, centralized=True, text_centralize=True)
 
     def create_background(self):
         self.background = Background(self.settings, self.screen)
@@ -36,8 +75,35 @@ class AlienInvasion(Game):
         self.objects.append(self.aliens)
 
     def create_projectiles(self):
-        self.projectiles = Projectiles(
-                self.settings, self.screen, self.ship, self.aliens)
+        self.projectiles = Projectiles(             # , self !
+                self.settings, self.screen, self.ship, self.aliens, self)
         self.keydown_handlers[pygame.K_SPACE].append(
                 self.projectiles.handle_keydown)
         self.objects.append(self.projectiles)
+
+    def update(self):
+        if self.state != "game":
+            return
+
+        super().update()
+
+    def draw(self):
+        if self.state == "start":
+            self.background.draw()
+            self.__draw_menu()
+            return
+
+        super().draw()
+
+    def __draw_menu(self):
+        for b in self.menu_buttons:
+            b.draw()
+
+    def __remove_menu(self):
+        for b in self.menu_buttons:
+            self.objects.remove(b)
+
+    def __start_game(self):
+        self.__remove_menu()
+        self.is_game_running = True
+        self.state = "game"

@@ -1,3 +1,6 @@
+import colors
+
+
 class Settings():
     """Класс для хранения всех настроек игры Alien Invasion."""
 
@@ -40,3 +43,12 @@ class Settings():
         # (горизонтальной и вериткальной) следующей волны
         self.new_wave_drop_speed_increase_factor = 1.20
         self.new_wave_alien_speed_increase_factor  = 1.20
+
+        self.button_position = \
+                self.screen_width // 2, self.screen_height // 2, 150, 40
+        self.button_text_color = colors.WHITE
+        self.button_text_font = None
+        self.button_text_size = 30
+        self.button_normal_back_color = colors.GREEN
+        self.button_hover_back_color = colors.GREEN3
+        self.button_pressed_back_color = colors.GREEN2
