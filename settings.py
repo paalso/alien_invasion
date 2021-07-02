@@ -14,9 +14,12 @@ class Settings():
 
         # Spaceship parameters
         self.ship_img = "images/ship.png"
+        self.lives = 3
         self.ship_width = 50
         self.ship_height = int(self.ship_width * 1.24)
         self.ship_speed = 8
+        self.ship_moves_per_bang_frame = 1
+        self.ship_bang_inc_quotient = 2
 
         # Projectile parameters
         self.projectile_img = "images/projectile.png"
@@ -29,20 +32,25 @@ class Settings():
 
         # Alien Ship parameters
         self.alien_ship_img = "images/aliens_ship.png"
-        self.alien_bang_sound = "sounds/bang.mp3"
-        self.moves_per_bang_frame = 3
+        self.alien_bang_sound = "sounds/bang_alien.mp3"
         self.alien_ship_width = 75
         self.alien_ship_height = int(self.alien_ship_width * 0.75)
         self.alien_speed = 0.20 * self.ship_speed
         self.fleet_drop_speed = 10
+        self.alien_moves_per_bang_frame = 3
+        self.alien_bang_inc_quotient = 1.5
+
         # факторы увеличения скоростей (горизонтальной и вериткальной)
         # смещения к моменту, когда остается жив последний alien ship
+        # т.е. в пределах уровня скорости возрастают, но к началу
+        # следующего - падают, но до значения выше, чем пройденном
         self.drop_speed_increase_factor = 2
         self.alien_speed_increase_factor  = 2
+
         # факторы увеличения начальных скоростей
         # (горизонтальной и вериткальной) следующей волны
-        self.new_wave_drop_speed_increase_factor = 1.20
-        self.new_wave_alien_speed_increase_factor  = 1.20
+        self.new_wave_drop_speed_increase_factor = 1.15
+        self.new_wave_alien_speed_increase_factor  = 1.15
 
         self.button_position = \
                 self.screen_width // 2, self.screen_height // 2, 150, 40

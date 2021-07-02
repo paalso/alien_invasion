@@ -3,6 +3,8 @@ import pygame
 
 class GameGroupObject:
 
+    counter = 0
+
     def __init__(self, settings, screen):
         self.settings = settings
         self.screen = screen
@@ -16,6 +18,9 @@ class GameGroupObject:
 
     def remove(self, item):
         self.items.remove(item)
+
+    def empty(self):
+        self.items.empty()
 
     def update(self):
         self.items.update()

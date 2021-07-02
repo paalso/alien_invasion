@@ -59,7 +59,7 @@ class AlienInvasion(Game):
         self.objects.append(self.ship)
 
     def create_aliens(self):
-        self.aliens = Aliens(self.settings, self.screen, self.ship)
+        self.aliens = Aliens(self.settings, self.screen, self.ship, self)
         self.objects.append(self.aliens)
 
     def create_projectiles(self):

@@ -6,7 +6,7 @@ from alien import Alien
 
 class Aliens(GameGroupObject):
 
-    def __init__(self, settings, screen, ship):
+    def __init__(self, settings, screen, ship, game):
         super().__init__(settings, screen)
         self.counter = 0
         self.ship = ship
@@ -14,13 +14,14 @@ class Aliens(GameGroupObject):
         self.number = len(self.items)
         self.fleet_drop_speed = self.settings.fleet_drop_speed
         self.bang_sound = pygame.mixer.Sound(self.settings.alien_bang_sound)
+        self.game = game
+        self.__set_alien_speed_increasing_parameters()
 
     def remove(self, alien):
         super().remove(alien)
         #self.bang_sound.play()
 
     def create_fleet(self):
-        self.counter += 1
         aliens_number_in_row = self.__get_aliens_number_in_row()
         distance_x_between_aliens = \
                 self.__get_distance_x_between_aliens(aliens_number_in_row)
@@ -33,10 +34,17 @@ class Aliens(GameGroupObject):
 
     def update(self):
         if len(self) == 0:
-            self.__start_new_level()
+            self.__start_new_wave()
 
         if self.__check_aliens_screen_collision():
-            self.__change_fleet_direction()
+            self.__drop_n_change_fleet_direction()
+
+        collided_with_ship_alien = pygame.sprite.spritecollideany(
+                self.ship, self.items)
+
+        if collided_with_ship_alien:
+            self.ship.hit()
+            collided_with_ship_alien.hit()
 
         self.__remove_annihilated_aliens()
         self.items.update()
@@ -78,18 +86,42 @@ class Aliens(GameGroupObject):
             if alien.is_annihilated:
                 self.items.remove(alien)
 
-    def __change_fleet_direction(self):
+    def __set_alien_speed_increasing_parameters(self):
+        Alien.annihilation_drop_speed_increase_factor = \
+                self.settings.drop_speed_increase_factor ** (1 / self.number)
 
-        # интересно, насколько некошерно так делать?
-        Alien.fleet_direction = - Alien.fleet_direction
+        Alien.annihilation_speed_increase_factor = \
+                self.settings.alien_speed_increase_factor ** (1 / self.number)
+
+    def __drop_n_change_fleet_direction(self):
+
+        Alien.inverse_direction()
 
         for alien in self.items.sprites():
-            alien.y += self.fleet_drop_speed
+            alien.y += Alien.drop_speed_increase_factor * self.fleet_drop_speed
             alien.rect.y = alien.y
 
-    def __start_new_level(self):
-#        print("Another aliens wave destoyed!!!")
-#        self.projectiles.empty()
+    def __start_new_wave(self):
+        print("Another aliens wave destoyed!!!")
+        self.ship.lives_left += 1
+        self.counter += 1
+        Alien.reset_speed_increase_factors(
+                self.settings.new_wave_alien_speed_increase_factor,
+                self.settings.new_wave_drop_speed_increase_factor,
+                self.counter)
+        self.__clear_n_generate_wave()
+
+    def __repeat_wave(self):
+        print("Your was killed")
+        self.ship.lives_left -= 1
+        Alien.reset_speed_increase_factors(
+                self.settings.new_wave_alien_speed_increase_factor,
+                self.settings.new_wave_drop_speed_increase_factor,
+                self.counter - 1)
+        self.__clear_n_generate_wave()
+
+    def __clear_n_generate_wave(self):
+        self.game.projectiles.empty()
+        self.ship.set_center()
         pygame.time.delay(2500)
         self.create_fleet()
-        # Увеличение начальной скорости у следующей волны
