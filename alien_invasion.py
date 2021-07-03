@@ -2,9 +2,10 @@ import sys, pygame
 import colors
 from settings import Settings
 from game import Game
+from background import Background
+from info_panel import InfoPanel
 from text_object import TextObject
 from button import Button
-from background import Background
 from ship import Ship
 from aliens import Aliens
 from projectiles import Projectiles
@@ -22,6 +23,22 @@ class AlienInvasion(Game):
         self.keydown_handlers[pygame.K_c].append(self.handle_keydown)
         self.keydown_handlers[pygame.K_p].append(self.handle_keydown)
         self.keyup_handlers[pygame.K_s].append(self.handle_keyup)
+
+    @property
+    def lives_left(self):
+        return self.ship.lives_left
+
+    @property
+    def score(self):
+        return self.projectiles.hits
+
+    @property
+    def shots(self):
+        return self.projectiles.shots
+
+    @property
+    def wave(self):
+        return self.aliens.counter
 
     def handle_keyup(self, key):
         if self.state == "start" and key == pygame.K_s:
@@ -42,13 +59,18 @@ class AlienInvasion(Game):
         self.create_ship()
         self.create_aliens()
         self.create_projectiles()
-
-    def create_menu(self):  # ?!
-        self.__create_on_play_button("START")
+        self.create_info_panel()
 
     def create_background(self):
         self.background = Background(self.settings, self.screen)
         self.objects.append(self.background)
+
+    def create_menu(self):  # ?!
+        self.__create_on_play_button("START")
+
+    def create_info_panel(self):
+        self.info_panel = InfoPanel(self.settings, self.screen, self)
+        self.objects.append(self.info_panel)
 
     def create_ship(self):
         ship = Ship(self.settings, self.screen, self)

@@ -12,7 +12,7 @@ class Ship(GameObject):
 
         super().__init__(settings, screen)
         self.game = game
-        self.lives_left = self.settings.lives
+        self.lives_left = self.settings.start_lives
         self.image = pygame.transform.scale(
                 pygame.image.load(settings.ship_img),
                 (self.settings.ship_width, self.settings.ship_height))
@@ -29,7 +29,8 @@ class Ship(GameObject):
 
     def hit(self):
         self.is_hit = True
-        self.hit_counter = 0
+        self.lives_left -= 1
+        self.bang_frames_counter = 0
         pygame.mixer.Sound(Ship.bang_sound).play()
 
     def handle_keydown(self, key):
@@ -54,14 +55,18 @@ class Ship(GameObject):
         # Этот фрагмент практически повторяет аналогичный из класса Alien
         # и с этим надо бы что-то делать
         if self.is_hit:
-            if self.hit_counter > self.settings.ship_moves_per_bang_frame * \
-                                    (Ship.bang_images_number - 1):
+##            print("Hit!")
+##            print("Lives before hit ", self.lives_left )
+##            print("Lives after hit ", self.lives_left )
+            if self.bang_frames_counter > \
+                    self.settings.ship_moves_per_bang_frame * \
+                    (Ship.bang_images_number - 1):
                 self.is_annihilated = True
                 return
 
             image_file =  "{}/{}.png".format(
                     Ship.bang_images,
-                    str(self.hit_counter // self.settings.ship_moves_per_bang_frame))
+                    str(self.bang_frames_counter // self.settings.ship_moves_per_bang_frame))
 
             self.image = pygame.transform.scale(
                 pygame.image.load(image_file),
@@ -69,10 +74,10 @@ class Ship(GameObject):
                 int(self.settings.ship_height * self.settings.ship_bang_inc_quotient)))
             self.image.set_colorkey((0, 0, 0))  # Fix it!
 
-            self.hit_counter += 1
+            self.bang_frames_counter += 1
 
-        if self.is_annihilated:
-            self.game.state = "finish"
+##        if self.is_annihilated:
+##            self.game.state = "finish"
 
     def set_center(self):
         self.rect.centerx = self.sc_rect.centerx

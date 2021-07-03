@@ -8,13 +8,13 @@ class Settings():
         """Инициализирует настройки игры."""
         # Screen parameters
         self.background = "images/star_space.png"
-        self.screen_width = 700
-        self.screen_height = 500
+        self.screen_width = 960
+        self.screen_height = 720
         self.bg_color = 15, 20, 25
 
         # Spaceship parameters
         self.ship_img = "images/ship.png"
-        self.lives = 3
+        self.start_lives = 1
         self.ship_width = 50
         self.ship_height = int(self.ship_width * 1.24)
         self.ship_speed = 8
@@ -56,7 +56,14 @@ class Settings():
                 self.screen_width // 2, self.screen_height // 2, 150, 40
         self.button_text_color = colors.WHITE
         self.button_text_font = None
+        self.button_text_font = "fonts/Alenia.ttf"
+        self.button_text_font = "fonts/panicbuttonbb_reg.ttf"
         self.button_text_size = 30
         self.button_normal_back_color = colors.GREEN
         self.button_hover_back_color = colors.GREEN3
         self.button_pressed_back_color = colors.GREEN2
+
+        self.info_text_color = colors.RED3
+        self.info_text_font = "fonts/Alien.ttf"
+        self.info_text_size = int(0.3 * self.ship_height)
+

@@ -48,9 +48,6 @@ class GameObject:
     def centery(self):
         return self.rect.centery
 
-    def draw(self):
-        self.screen.blit(self.image, self.rect)
-
     def move(self, dx, dy):
         self.rect.move_ip(dx, dy)
 
@@ -58,3 +55,6 @@ class GameObject:
         if self.speed == [0, 0]:
             return
         self.move(*self.speed)
+
+    def draw(self):
+        self.screen.blit(self.image, self.rect)

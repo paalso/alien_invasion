@@ -11,7 +11,8 @@ class TextObject:
         self.pos = x, y
         self.text = text
         self.color = color
-        self.font = pygame.font.SysFont(font_name, font_size)
+        # self.font = pygame.font.SysFont(font_name, font_size)
+        self.font = pygame.font.Font(font_name, font_size)
         self.surface, self.rect = self.get_surface(text)
         self.rect.topleft = self.pos
 

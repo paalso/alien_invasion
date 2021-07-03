@@ -10,11 +10,11 @@ class Aliens(GameGroupObject):
         super().__init__(settings, screen)
         self.counter = 0
         self.ship = ship
+        self.game = game
         self.create_fleet()
         self.number = len(self.items)
         self.fleet_drop_speed = self.settings.fleet_drop_speed
         self.bang_sound = pygame.mixer.Sound(self.settings.alien_bang_sound)
-        self.game = game
         self.__set_alien_speed_increasing_parameters()
 
     def remove(self, alien):
@@ -45,6 +45,7 @@ class Aliens(GameGroupObject):
         if collided_with_ship_alien:
             self.ship.hit()
             collided_with_ship_alien.hit()
+            self.__repeat_wave()
 
         self.__remove_annihilated_aliens()
         self.items.update()
@@ -114,7 +115,6 @@ class Aliens(GameGroupObject):
 
     def __repeat_wave(self):
         print("Your was killed")
-        self.ship.lives_left -= 1
         Alien.reset_speed_increase_factors(
                 self.settings.new_wave_alien_speed_increase_factor,
                 self.settings.new_wave_drop_speed_increase_factor,
@@ -122,6 +122,7 @@ class Aliens(GameGroupObject):
         self.__clear_n_generate_wave()
 
     def __clear_n_generate_wave(self):
+        self.empty()
         self.game.projectiles.empty()
         self.ship.set_center()
         pygame.time.delay(2500)

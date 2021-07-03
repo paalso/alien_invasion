@@ -49,7 +49,7 @@ class Button(GameRectObject):   # GameObject ?
     def draw(self):
         self.surface.fill(self.back_color)
         self.text.draw(self.surface, self.text_centralize)
-        self.screen.blit(self.surface, self.rect)
+        super().draw()
 
     def handle_mouse_event(self, type, pos):
         if type == pygame.MOUSEMOTION:

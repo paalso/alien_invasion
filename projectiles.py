@@ -13,6 +13,8 @@ class Projectiles(GameGroupObject):
         self.ship = ship
         self.aliens = aliens
         self.game = game
+        self.hits = 0
+        self.shots = 0
 
     def fire_projectile(self, ship):
         if not self.game.state == "game":
@@ -20,6 +22,7 @@ class Projectiles(GameGroupObject):
         if len(self.items) < self.settings.projectiles_allowed:
             projectile = Projectile(self.settings, self.screen, ship)
             self.items.add(projectile)
+            self.shots += 1
 
     def handle_keydown(self, key):
         if key == pygame.K_SPACE:
@@ -42,6 +45,7 @@ class Projectiles(GameGroupObject):
                         continue
 
                     alien.hit()
+                    self.hits += 1
                     Alien.increase_speed()
                     Alien.increase_drop_speed()
 

@@ -61,7 +61,7 @@ class Alien(GameObject, pygame.sprite.Sprite):
 
     def hit(self):
         self.is_hit = True
-        self.hit_counter = 0
+        self.bang_frames_counter = 0
         pygame.mixer.Sound(Alien.bang_sound).play()
 
     def update(self):
@@ -70,21 +70,20 @@ class Alien(GameObject, pygame.sprite.Sprite):
         self.rect.x = self.x
 
         if self.is_hit:
-            if self.hit_counter > self.settings.alien_moves_per_bang_frame * \
+            if self.bang_frames_counter > self.settings.alien_moves_per_bang_frame * \
                                     (Alien.bang_images_number - 1):
                 self.is_annihilated = True
-                del(self)   # ?
                 return
 
             image_file =  "{}/{}.png".format(
                     Alien.bang_images,
-                    self.hit_counter // self.settings.alien_moves_per_bang_frame)
+                    self.bang_frames_counter // self.settings.alien_moves_per_bang_frame)
 
             self.image = pygame.transform.scale(
                 pygame.image.load(image_file),
                 (int(self.settings.alien_ship_width * self.settings.alien_bang_inc_quotient),
                 int(self.settings.alien_ship_height * self.settings.alien_bang_inc_quotient)))
-            self.hit_counter += 1
+            self.bang_frames_counter += 1
 
     def draw(self):
         self.screen.blit(self.image, self.rect)
