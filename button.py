@@ -1,37 +1,31 @@
 import pygame
 
-from game_object import GameObject
+from game_rect_object import GameRectObject
 from text_object import TextObject
 # from settings import Settings
 
 
-class Button(GameObject):   # GameObject ?
+class Button(GameRectObject):   # GameObject ?
     def __init__(self, settings, screen, x, y, w, h, text,
                 on_click=lambda x: None, padding=0,
                 centralized=False, text_centralize=False):
-        self.settings = settings
-        self.screen = screen
-        self.x = x
-        self.y = y
-        self.w = w
-        self.h = h
+        super().__init__(settings, screen, x, y, w, h)
         self.speed = (0, 0)
         self.text_centralize = text_centralize
         self.text_content = text
 
-        self.surface = pygame.Surface((self.w, self.h))
-        self.rect = self.surface.get_rect()
         if centralized:
-            self.rect.center = (self.x, self.y)
+            self.rect.center = (self.left, self.top)
         else:
-            self.rect.topleft = (self.x, self.y)
+            self.rect.topleft = (self.left, self.top)
 
         self.state = 'normal'
         self.on_click = on_click
 
         # text in the center of the button if text_centralize
-        text_x, text_y = (self.w // 2, self.h // 2) if text_centralize \
-                        else (padding, padding)
+        text_x, text_y = \
+                (self.width // 2, self.height // 2) if text_centralize \
+                else (padding, padding)
         self.text = TextObject(
                 text_x, text_y, text,
                 self.settings.button_text_color,

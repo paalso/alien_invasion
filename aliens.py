@@ -102,7 +102,8 @@ class Aliens(GameGroupObject):
             alien.rect.y = alien.y
 
     def __start_new_wave(self):
-        print("Another aliens wave destoyed!!!")
+        print("Another aliens wave destoyed!")
+        print("But next even more dangerous wave is approaching!")
         self.ship.lives_left += 1
         self.counter += 1
         Alien.reset_speed_increase_factors(

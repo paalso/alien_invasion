@@ -2,6 +2,7 @@ import sys, pygame
 import colors
 from settings import Settings
 from game import Game
+from text_object import TextObject
 from button import Button
 from background import Background
 from ship import Ship
@@ -50,7 +51,7 @@ class AlienInvasion(Game):
         self.objects.append(self.background)
 
     def create_ship(self):
-        ship = Ship(self.settings, self.screen)
+        ship = Ship(self.settings, self.screen, self)
         self.keydown_handlers[pygame.K_LEFT].append(ship.handle_keydown)
         self.keydown_handlers[pygame.K_RIGHT].append(ship.handle_keydown)
         self.keyup_handlers[pygame.K_LEFT].append(ship.handle_keyup)
@@ -79,6 +80,12 @@ class AlienInvasion(Game):
         if self.state == "start":
             self.background.draw()
             self.__draw_menu()
+            return
+
+        elif self.state == "finish":
+            self.background.draw()
+            text = TextObject(100, 100, "You lose :(", colors.RED1, None, 50)
+            text.draw(self.screen)
             return
 
         super().draw()

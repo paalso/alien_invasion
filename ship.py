@@ -8,12 +8,11 @@ class Ship(GameObject):
     bang_images = "images/bang_ship"
     bang_images_number = len(os.listdir(bang_images))
 
-    def __init__(self, settings, screen):
+    def __init__(self, settings, screen, game):
 
         super().__init__(settings, screen)
-
+        self.game = game
         self.lives_left = self.settings.lives
-
         self.image = pygame.transform.scale(
                 pygame.image.load(settings.ship_img),
                 (self.settings.ship_width, self.settings.ship_height))
@@ -52,6 +51,8 @@ class Ship(GameObject):
         if self.moving_left and self.left > self.sc_rect.left:
             self.move(-shift, 0)
 
+        # Этот фрагмент практически повторяет аналогичный из класса Alien
+        # и с этим надо бы что-то делать
         if self.is_hit:
             if self.hit_counter > self.settings.ship_moves_per_bang_frame * \
                                     (Ship.bang_images_number - 1):
@@ -70,5 +71,11 @@ class Ship(GameObject):
 
             self.hit_counter += 1
 
+        if self.is_annihilated:
+            self.game.state = "finish"
+
     def set_center(self):
         self.rect.centerx = self.sc_rect.centerx
+
+    def _finish_game():
+        pass
