@@ -4,15 +4,18 @@ from game_rect_object import GameRectObject
 from text_object import TextObject
 # from settings import Settings
 
+PRESS_DELAY = 1000
+
 
 class Button(GameRectObject):   # GameObject ?
     def __init__(self, settings, screen, x, y, w, h, text,
-                on_click=lambda x: None, padding=0,
-                centralized=False, text_centralize=False):
+                on_click=lambda x: None, press_key=None,
+                padding=0, centralized=False, text_centralize=False):
         super().__init__(settings, screen, x, y, w, h)
         self.text_centralize = text_centralize
         self.text_content = text
 
+        # if centralized center = x, y else topleft = x, y
         if centralized:
             self.rect.center = (self.left, self.top)
         else:
@@ -20,6 +23,7 @@ class Button(GameRectObject):   # GameObject ?
 
         self.state = 'normal'
         self.on_click = on_click
+        self.press_key = press_key
 
         # text in the center of the button if text_centralize
         text_x, text_y = \
@@ -49,6 +53,12 @@ class Button(GameRectObject):   # GameObject ?
         self.surface.fill(self.back_color)
         self.text.draw(self.surface, self.text_centralize)
         super().draw()
+
+    def handle_up(self, key):
+        if self.press_key and key == self.press_key:
+            self.state = 'pressed'
+            self.on_click(self)
+        self.state = 'normal'
 
     def handle_mouse_event(self, type, pos):
         if type == pygame.MOUSEMOTION:
