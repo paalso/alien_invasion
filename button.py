@@ -10,7 +10,6 @@ class Button(GameRectObject):   # GameObject ?
                 on_click=lambda x: None, padding=0,
                 centralized=False, text_centralize=False):
         super().__init__(settings, screen, x, y, w, h)
-        self.speed = (0, 0)
         self.text_centralize = text_centralize
         self.text_content = text
 

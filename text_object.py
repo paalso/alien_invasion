@@ -31,4 +31,3 @@ class TextObject:
 
     def update(self):
         pass
-        #self.rect.move_ip(1,1)

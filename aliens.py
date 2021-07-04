@@ -2,24 +2,25 @@ import pygame
 
 from game_group_object import GameGroupObject
 from alien import Alien
+from text_object import TextObject
 
 
 class Aliens(GameGroupObject):
 
     def __init__(self, settings, screen, ship, game):
         super().__init__(settings, screen)
-        self.counter = 0
+        self.counter = 1
         self.ship = ship
         self.game = game
+        self.hits = 0
         self.create_fleet()
-        self.number = len(self.items)
+        self.start_fleet_size = len(self.items)
         self.fleet_drop_speed = self.settings.fleet_drop_speed
         self.bang_sound = pygame.mixer.Sound(self.settings.alien_bang_sound)
         self.__set_alien_speed_increasing_parameters()
 
     def remove(self, alien):
         super().remove(alien)
-        #self.bang_sound.play()
 
     def create_fleet(self):
         aliens_number_in_row = self.__get_aliens_number_in_row()
@@ -45,6 +46,8 @@ class Aliens(GameGroupObject):
         if collided_with_ship_alien:
             self.ship.hit()
             collided_with_ship_alien.hit()
+
+        if self.ship.is_annihilated and self.ship.lives_left > 0:
             self.__repeat_wave()
 
         self.__remove_annihilated_aliens()
@@ -89,10 +92,12 @@ class Aliens(GameGroupObject):
 
     def __set_alien_speed_increasing_parameters(self):
         Alien.annihilation_drop_speed_increase_factor = \
-                self.settings.drop_speed_increase_factor ** (1 / self.number)
+                self.settings.drop_speed_increase_factor ** \
+                (1 / self.start_fleet_size)
 
         Alien.annihilation_speed_increase_factor = \
-                self.settings.alien_speed_increase_factor ** (1 / self.number)
+                self.settings.alien_speed_increase_factor ** \
+                (1 / self.start_fleet_size)
 
     def __drop_n_change_fleet_direction(self):
 
@@ -111,6 +116,7 @@ class Aliens(GameGroupObject):
                 self.settings.new_wave_alien_speed_increase_factor,
                 self.settings.new_wave_drop_speed_increase_factor,
                 self.counter)
+##        self.game.state = "new wave"
         self.__clear_n_generate_wave()
 
     def __repeat_wave(self):
@@ -124,6 +130,6 @@ class Aliens(GameGroupObject):
     def __clear_n_generate_wave(self):
         self.empty()
         self.game.projectiles.empty()
-        self.ship.set_center()
+        self.ship.reload_ship()
         pygame.time.delay(2500)
         self.create_fleet()

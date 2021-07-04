@@ -4,9 +4,9 @@ from settings import Settings
 from game import Game
 from background import Background
 from info_panel import InfoPanel
-from text_object import TextObject
 from button import Button
 from ship import Ship
+from alien import Alien
 from aliens import Aliens
 from projectiles import Projectiles
 
@@ -30,7 +30,7 @@ class AlienInvasion(Game):
 
     @property
     def score(self):
-        return self.projectiles.hits
+        return Alien.hits_counter
 
     @property
     def shots(self):
@@ -96,6 +96,9 @@ class AlienInvasion(Game):
         if self.state != "game":
             return
 
+        if self.state == "new wave":
+            self.__create_on_play_button("New wave")
+
         super().update()
 
     def draw(self):
@@ -124,8 +127,6 @@ class AlienInvasion(Game):
         self.menu_buttons.append(on_play_button)
         self.objects.append(on_play_button)
         self.mouse_handlers.append(on_play_button.handle_mouse_event )
-
-        return on_play_button
 
     def __draw_menu(self):
         for b in self.menu_buttons:

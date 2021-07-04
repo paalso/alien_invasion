@@ -7,19 +7,21 @@ class Settings():
     def __init__(self):
         """Инициализирует настройки игры."""
         # Screen parameters
-        self.background = "images/star_space.png"
-        self.screen_width = 960
-        self.screen_height = 720
+        self.background = "images/star_space.jpg"
+        self.screen_width = 600
+        self.screen_height = 480
         self.bg_color = 15, 20, 25
 
         # Spaceship parameters
         self.ship_img = "images/ship.png"
-        self.start_lives = 1
+        self.start_lives = 2
         self.ship_width = 50
         self.ship_height = int(self.ship_width * 1.24)
         self.ship_speed = 8
         self.ship_moves_per_bang_frame = 1
         self.ship_bang_inc_quotient = 2
+        self.bang_sound = "sounds/bang_ship.mp3"
+        self.bang_images = "images/bang_ship"
 
         # Projectile parameters
         self.projectile_img = "images/projectile.png"
@@ -36,7 +38,7 @@ class Settings():
         self.alien_ship_width = 75
         self.alien_ship_height = int(self.alien_ship_width * 0.75)
         self.alien_speed = 0.20 * self.ship_speed
-        self.fleet_drop_speed = 10
+        self.fleet_drop_speed = 10  # 10
         self.alien_moves_per_bang_frame = 3
         self.alien_bang_inc_quotient = 1.5
 
@@ -67,3 +69,6 @@ class Settings():
         self.info_text_font = "fonts/Alien.ttf"
         self.info_text_size = int(0.3 * self.ship_height)
 
+        self.msg_text_color = colors.RED2
+        self.msg_text_font = "fonts/Alien.ttf"
+        self.msg_text_size = int(0.3 * self.ship_height)

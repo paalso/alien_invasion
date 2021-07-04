@@ -4,22 +4,16 @@ from game_object import GameObject
 
 class Ship(GameObject):
 
-    bang_sound = "sounds/bang_ship.mp3"
-    bang_images = "images/bang_ship"
-    bang_images_number = len(os.listdir(bang_images))
-
     def __init__(self, settings, screen, game):
 
         super().__init__(settings, screen)
         self.game = game
         self.lives_left = self.settings.start_lives
-        self.image = pygame.transform.scale(
-                pygame.image.load(settings.ship_img),
-                (self.settings.ship_width, self.settings.ship_height))
+        self.__load_ship_image()
         self.rect = self.image.get_rect()
 
         self.rect.bottom = self.sc_rect.bottom
-        self.set_center()
+        self.__set_center()
 
         self.moving_left = False
         self.moving_right = False
@@ -27,11 +21,19 @@ class Ship(GameObject):
         self.is_hit = False
         self.is_annihilated = False
 
+        self.bang_images_number = len(os.listdir(self.settings.bang_images))
+
+    def reload_ship(self):
+        self.__load_ship_image()
+        self.is_hit = False
+        self.is_annihilated = False
+        self.__set_center()
+        self.bang_frames_counter = 0
+
     def hit(self):
         self.is_hit = True
-        self.lives_left -= 1
         self.bang_frames_counter = 0
-        pygame.mixer.Sound(Ship.bang_sound).play()
+        pygame.mixer.Sound(self.settings.bang_sound).play()
 
     def handle_keydown(self, key):
         if key == pygame.K_LEFT:
@@ -55,32 +57,35 @@ class Ship(GameObject):
         # Этот фрагмент практически повторяет аналогичный из класса Alien
         # и с этим надо бы что-то делать
         if self.is_hit:
-##            print("Hit!")
-##            print("Lives before hit ", self.lives_left )
-##            print("Lives after hit ", self.lives_left )
             if self.bang_frames_counter > \
                     self.settings.ship_moves_per_bang_frame * \
-                    (Ship.bang_images_number - 1):
+                    (self.bang_images_number - 1):
                 self.is_annihilated = True
+                self.lives_left -= 1
                 return
 
             image_file =  "{}/{}.png".format(
-                    Ship.bang_images,
-                    str(self.bang_frames_counter // self.settings.ship_moves_per_bang_frame))
+                    self.settings.bang_images,
+                    str(self.bang_frames_counter // \
+                    self.settings.ship_moves_per_bang_frame))
 
             self.image = pygame.transform.scale(
                 pygame.image.load(image_file),
-                (int(self.settings.ship_width * self.settings.ship_bang_inc_quotient),
-                int(self.settings.ship_height * self.settings.ship_bang_inc_quotient)))
+                (int(self.settings.ship_width * \
+                    self.settings.ship_bang_inc_quotient),
+                int(self.settings.ship_height * \
+                    self.settings.ship_bang_inc_quotient)))
             self.image.set_colorkey((0, 0, 0))  # Fix it!
 
             self.bang_frames_counter += 1
 
-##        if self.is_annihilated:
-##            self.game.state = "finish"
-
-    def set_center(self):
+    def __set_center(self):
         self.rect.centerx = self.sc_rect.centerx
+
+    def __load_ship_image(self):
+        self.image = pygame.transform.scale(
+                pygame.image.load(self.settings.ship_img),
+                (self.settings.ship_width, self.settings.ship_height))
 
     def _finish_game():
         pass

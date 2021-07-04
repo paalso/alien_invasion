@@ -13,7 +13,6 @@ class Projectiles(GameGroupObject):
         self.ship = ship
         self.aliens = aliens
         self.game = game
-        self.hits = 0
         self.shots = 0
 
     def fire_projectile(self, ship):
@@ -45,7 +44,6 @@ class Projectiles(GameGroupObject):
                         continue
 
                     alien.hit()
-                    self.hits += 1
                     Alien.increase_speed()
                     Alien.increase_drop_speed()
 
