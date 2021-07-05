@@ -33,9 +33,20 @@ class Aliens(GameGroupObject):
             for j in range(aliens_number_in_row):
                 self.__create_alien(i, j, distance_x_between_aliens)
 
+    def start_new_wave(self):
+        print("Another aliens wave destoyed!")
+        print("But next even more dangerous wave is approaching!")
+        self.ship.lives_left += 1
+        self.counter += 1
+        Alien.reset_speed_increase_factors(
+                self.settings.new_wave_alien_speed_increase_factor,
+                self.settings.new_wave_drop_speed_increase_factor,
+                self.counter)
+        self.__clear_n_generate_wave()
+
     def update(self):
-        if len(self) == 0:
-            self.__start_new_wave()
+        if len(self) == 0 and not self.ship.is_hit:
+            self.game.state = "new wave"
 
         if self.__check_aliens_screen_collision():
             self.__drop_n_change_fleet_direction()
@@ -107,18 +118,6 @@ class Aliens(GameGroupObject):
             alien.y += Alien.drop_speed_increase_factor * self.fleet_drop_speed
             alien.rect.y = alien.y
 
-    def __start_new_wave(self):
-        print("Another aliens wave destoyed!")
-        print("But next even more dangerous wave is approaching!")
-        self.ship.lives_left += 1
-        self.counter += 1
-        Alien.reset_speed_increase_factors(
-                self.settings.new_wave_alien_speed_increase_factor,
-                self.settings.new_wave_drop_speed_increase_factor,
-                self.counter)
-##        self.game.state = "new wave"
-        self.__clear_n_generate_wave()
-
     def __repeat_wave(self):
         print("Your was killed")
         Alien.reset_speed_increase_factors(
@@ -131,5 +130,4 @@ class Aliens(GameGroupObject):
         self.empty()
         self.game.projectiles.empty()
         self.ship.reload_ship()
-        pygame.time.delay(2500)
         self.create_fleet()

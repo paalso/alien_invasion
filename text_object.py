@@ -2,12 +2,7 @@ import pygame
 
 
 class TextObject:
-    def __init__(self,
-                x, y,
-                text,
-                color,
-                font_name,
-                font_size):
+    def __init__(self, x, y, text, color, font_name, font_size):
         self.pos = x, y
         self.text = text
         self.color = color

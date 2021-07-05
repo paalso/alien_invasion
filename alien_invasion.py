@@ -1,4 +1,4 @@
-import sys, pygame
+import sys, pygame, time
 import colors
 from settings import Settings
 from game import Game
@@ -10,19 +10,23 @@ from alien import Alien
 from aliens import Aliens
 from projectiles import Projectiles
 
+from popup import Popup
+
 
 class AlienInvasion(Game):
     def __init__(self):
         super().__init__(Settings(), 'Alien Invasion')
         self.quit_keys = [pygame.K_q]
         self.menu_buttons = []  # ?
+        self.popups = []  # ?
         self.create_objects()
 
-        self.is_game_running = True
+        self.start_ticks = -1
+
         self.state = "start"    # "game", "pause", "finish"
-        self.keydown_handlers[pygame.K_c].append(self.handle_keydown)
         self.keydown_handlers[pygame.K_p].append(self.handle_keydown)
-        self.keyup_handlers[pygame.K_s].append(self.handle_keyup)
+
+        self.keydown_handlers[pygame.K_z].append(self.handle_keydown)   # !!!
 
     @property
     def lives_left(self):
@@ -81,19 +85,30 @@ class AlienInvasion(Game):
         self.objects.append(self.aliens)
 
     def create_projectiles(self):
-        self.projectiles = Projectiles(             # , self !
+        self.projectiles = Projectiles(
                 self.settings, self.screen, self.ship, self.aliens, self)
         self.keydown_handlers[pygame.K_SPACE].append(
                 self.projectiles.handle_keydown)
         self.objects.append(self.projectiles)
 
     def update(self):
+        if self.state == "new wave":
+            if self.start_ticks == -1:
+                self.start_ticks = pygame.time.get_ticks()
+                self.__create_new_wave_message()
+
+            elif self.start_ticks >= 0 and \
+                    pygame.time.get_ticks() - self.start_ticks > \
+                    self.settings.msg_delay * 1000:
+                self.start_ticks = -1
+                self.__remove_popups()
+                self.state = "game"
+                self.aliens.start_new_wave()
+
         if self.state != "game":
             return
 
-        if self.state == "new wave":
-            self.__create_on_play_button("New wave")
-
+        print(self.state)
         super().update()
 
     def draw(self):
@@ -110,13 +125,33 @@ class AlienInvasion(Game):
 
         super().draw()
 
+    def __on_play(self, button):
+        self.__remove_menu()
+        self.__remove_popups()
+        self.state = "game"
+
+    def __draw_menu(self):
+        for b in self.menu_buttons:
+            b.draw()
+
+    def __remove_menu(self):
+        self.__remove_some_objects(self.menu_buttons)
+
+    def __remove_popups(self):
+        self.__remove_some_objects(self.popups)
+
+    def __remove_some_objects(self, some_objects):
+        for o in some_objects:
+            self.objects.remove(o)
+            if "press_key" in o.__dict__:
+                print("OK")
+
+        some_objects.clear()
+
     def __create_on_play_button(self, text, key=None):
 
-        def on_play(button):
-            self.__start_game()
-
         on_play_button = Button(self.settings, self.screen,
-                *self.settings.button_position, text, on_click=on_play,
+                *self.settings.button_position, text, on_click=self.__on_play,
                 press_key=key, centralized=True, text_centralize=True)
 
         self.menu_buttons.append(on_play_button)
@@ -124,18 +159,29 @@ class AlienInvasion(Game):
         self.mouse_handlers.append(on_play_button.handle_mouse_event )
 
         if key:
-            self.keyup_handlers[key].append(on_play_button.handle_up)
+            self.keyup_handlers[key].append(on_play_button.handle_keyup)
 
-    def __draw_menu(self):
-        for b in self.menu_buttons:
-            b.draw()
+    def __create_new_wave_message(self):
 
-    def __remove_menu(self):
-        for b in self.menu_buttons:
-            self.objects.remove(b)
-        self.menu_buttons.clear()
+        position = (self.settings.screen_width // 2 - 200,
+                    self.settings.screen_height // 2 - 100, 400, 300)
 
-    def __start_game(self):
-        self.__remove_menu()
-        self.is_game_running = True
-        self.state = "game"
+        text = self.settings.msg_new_wave_text
+
+        if self.wave == 1:
+            text = text.replace("yet another", "   the first")
+        elif self.wave == 2:
+            text = text.replace("yet another", "   the second")
+
+        popup = Popup(self.settings, self.screen, *position,
+                text, colors.RED1, None, font_name=self.settings.msg_text_font,
+                font_size=self.settings.msg_text_size,
+                on_click=self.__on_play, press_key=pygame.K_c,
+                transparent=True, centralized=False)
+
+        self.popups.append(popup)
+        self.objects.append(popup)
+
+        self.mouse_handlers.append(popup.handle_mouse_event )
+        self.keyup_handlers[pygame.K_c].append(popup.handle_keyup)
+

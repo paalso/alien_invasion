@@ -9,12 +9,12 @@ class Settings():
         # Screen parameters
         self.background = "images/star_space.jpg"
         self.screen_width = 600
-        self.screen_height = 480
+        self.screen_height = 400
         self.bg_color = 15, 20, 25
 
         # Spaceship parameters
         self.ship_img = "images/ship.png"
-        self.start_lives = 2
+        self.start_lives = 1
         self.ship_width = 50
         self.ship_height = int(self.ship_width * 1.24)
         self.ship_speed = 8
@@ -69,6 +69,12 @@ class Settings():
         self.info_text_font = "fonts/Alien.ttf"
         self.info_text_size = int(0.3 * self.ship_height)
 
+        self.msg_delay = 3
         self.msg_text_color = colors.RED2
         self.msg_text_font = "fonts/Alien.ttf"
-        self.msg_text_size = int(0.3 * self.ship_height)
+        self.msg_text_font = None
+        self.msg_text_size = int(0.6 * self.ship_height)
+
+        self.msg_new_wave_text = \
+            "You have repelled yet another Alien Wave. " + \
+            "But the next one, even more dangerous and ruthless, is coming..."

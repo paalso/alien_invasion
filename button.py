@@ -4,8 +4,6 @@ from game_rect_object import GameRectObject
 from text_object import TextObject
 # from settings import Settings
 
-PRESS_DELAY = 1000
-
 
 class Button(GameRectObject):   # GameObject ?
     def __init__(self, settings, screen, x, y, w, h, text,
@@ -54,7 +52,7 @@ class Button(GameRectObject):   # GameObject ?
         self.text.draw(self.surface, self.text_centralize)
         super().draw()
 
-    def handle_up(self, key):
+    def handle_keyup(self, key):
         if self.press_key and key == self.press_key:
             self.state = 'pressed'
             self.on_click(self)
