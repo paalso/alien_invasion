@@ -129,7 +129,9 @@ class AlienInvasion(Game):
         for o in some_objects:
             self.objects.remove(o)
             if "press_key" in o.__dict__:
-                print("OK")
+                key = o.press_key
+                self.keyup_handlers[key].remove(o.handle_keyup)
+                self.mouse_handlers.remove(o.handle_mouse_event )
 
         some_objects.clear()
 
