@@ -62,7 +62,7 @@ class Popup(GameRectObject):   # GameObject ?
     def handle_keyup(self, key):
         if self.press_key and key == self.press_key:
             self.state = 'pressed'
-            self.on_click(self)
+            self.on_click()
         self.state = 'normal'
 
     def set_text(self, text_content):
@@ -89,5 +89,5 @@ class Popup(GameRectObject):   # GameObject ?
 
     def handle_mouse_up(self, pos):
         if self.state == 'pressed':
-            self.on_click(self)
+            self.on_click()
             self.state = 'hover'

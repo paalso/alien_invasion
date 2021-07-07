@@ -21,12 +21,11 @@ class AlienInvasion(Game):
         self.popups = []  # ?
         self.create_objects()
 
-        self.start_ticks = -1
+        self.start_ticks = 0
+        self.pause_finished = False
 
         self.state = "start"    # "game", "pause", "finish"
         self.keydown_handlers[pygame.K_p].append(self.handle_keydown)
-
-        self.keydown_handlers[pygame.K_z].append(self.handle_keydown)   # !!!
 
     @property
     def lives_left(self):
@@ -92,28 +91,19 @@ class AlienInvasion(Game):
         self.objects.append(self.projectiles)
 
     def update(self):
-        if self.state == "new wave":
-            if self.start_ticks == -1:
-                self.start_ticks = pygame.time.get_ticks()
-                self.__create_new_wave_message()
+        print(self.state)
 
-            elif self.start_ticks >= 0 and \
-                    pygame.time.get_ticks() - self.start_ticks > \
-                    self.settings.msg_delay * 1000:
-                self.start_ticks = -1
-                self.__remove_popups()
-                self.state = "game"
-                self.aliens.start_new_wave()
+        if self.state == "new wave":
+            self.__start_new_wave()
 
         if self.state != "game":
             return
 
-        print(self.state)
         super().update()
 
     def draw(self):
         if self.state == "start":
-            self.background.draw()
+            self.background.draw()  # вынести выше?
             self.__draw_menu()
             return
 
@@ -124,11 +114,6 @@ class AlienInvasion(Game):
             return
 
         super().draw()
-
-    def __on_play(self, button):
-        self.__remove_menu()
-        self.__remove_popups()
-        self.state = "game"
 
     def __draw_menu(self):
         for b in self.menu_buttons:
@@ -150,8 +135,12 @@ class AlienInvasion(Game):
 
     def __create_on_play_button(self, text, key=None):
 
+        def on_play():
+            self.__remove_menu()
+            self.state = "game"
+
         on_play_button = Button(self.settings, self.screen,
-                *self.settings.button_position, text, on_click=self.__on_play,
+                *self.settings.button_position, text, on_click=on_play,
                 press_key=key, centralized=True, text_centralize=True)
 
         self.menu_buttons.append(on_play_button)
@@ -162,6 +151,10 @@ class AlienInvasion(Game):
             self.keyup_handlers[key].append(on_play_button.handle_keyup)
 
     def __create_new_wave_message(self):
+
+        def on_play():
+            self.__remove_popups()
+            self.pause_finished = True
 
         position = (self.settings.screen_width // 2 - 200,
                     self.settings.screen_height // 2 - 100, 400, 300)
@@ -176,7 +169,7 @@ class AlienInvasion(Game):
         popup = Popup(self.settings, self.screen, *position,
                 text, colors.RED1, None, font_name=self.settings.msg_text_font,
                 font_size=self.settings.msg_text_size,
-                on_click=self.__on_play, press_key=pygame.K_c,
+                on_click=on_play, press_key=pygame.K_c,
                 transparent=True, centralized=False)
 
         self.popups.append(popup)
@@ -185,3 +178,16 @@ class AlienInvasion(Game):
         self.mouse_handlers.append(popup.handle_mouse_event )
         self.keyup_handlers[pygame.K_c].append(popup.handle_keyup)
 
+    def __start_new_wave(self):
+            if not self.start_ticks:
+                self.start_ticks = pygame.time.get_ticks()
+                self.__create_new_wave_message()
+
+            elif self.pause_finished or self.start_ticks >= 0 and \
+                    pygame.time.get_ticks() - self.start_ticks > \
+                    self.settings.msg_delay * 1000:
+                self.pause_finished = False
+                self.start_ticks = 0
+                self.__remove_popups()
+                self.state = "game"
+                self.aliens.start_new_wave()
