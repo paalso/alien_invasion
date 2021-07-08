@@ -156,18 +156,12 @@ class AlienInvasion(Game):
             self.keyup_handlers[key].append(on_play_button.handle_keyup)
 
     def __start_new_wave(self):
-            if not self.start_ticks:
-                self.start_ticks = pygame.time.get_ticks()
-                self.__create_new_wave_message()
 
-            elif self.pause_finished or self.start_ticks >= 0 and \
-                    pygame.time.get_ticks() - self.start_ticks > \
-                    self.settings.msg_delay * 1000:
-                self.pause_finished = False
-                self.start_ticks = 0
-                self.__remove_popups()
-                self.state = "game"
-                self.aliens.start_new_wave()
+        def action():
+            self.state = "game"
+            self.aliens.start_new_wave()
+
+        self.__delay(action, self.settings.msg_new_wave_delay)
 
     def __endgame(self):
         self.__create_endgame_message()
@@ -209,3 +203,16 @@ class AlienInvasion(Game):
 
         self.mouse_handlers.append(popup.handle_mouse_event )
         self.keyup_handlers[pygame.K_c].append(popup.handle_keyup)
+
+    def __delay(self, action, duration):        # ?
+        if not self.start_ticks:
+            self.start_ticks = pygame.time.get_ticks()
+            self.__create_new_wave_message()
+
+        elif self.pause_finished or self.start_ticks >= 0 and \
+                pygame.time.get_ticks() - self.start_ticks > \
+                duration * 1000:
+            self.pause_finished = False
+            self.start_ticks = 0
+            self.__remove_popups()
+            action()

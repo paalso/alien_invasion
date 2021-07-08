@@ -69,7 +69,7 @@ class Settings():
         self.info_text_font = "fonts/Alien.ttf"
         self.info_text_size = int(0.3 * self.ship_height)
 
-        self.msg_delay = 3
+        self.msg_new_wave_delay = 3
         self.msg_text_color = colors.RED2
         self.msg_text_font = "fonts/Alien.ttf"
         self.msg_text_font = None
