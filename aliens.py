@@ -45,6 +45,16 @@ class Aliens(GameGroupObject):
         self.__clear_n_generate_wave()
 
     def update(self):
+
+        if self.ship.is_annihilated:
+            if self.ship.lives_left > 0:
+                self.__repeat_wave()
+            else:
+                self.game.state = "endgame"
+
+        if self.__check_aliens_get_through():
+            self.game.state = "endgame"
+
         if len(self) == 0 and not self.ship.is_hit:
             self.game.state = "new wave"
 
@@ -55,11 +65,9 @@ class Aliens(GameGroupObject):
                 self.ship, self.items)
 
         if collided_with_ship_alien:
-            self.ship.hit()
+            if not self.ship.is_hit:
+                self.ship.hit()
             collided_with_ship_alien.hit()
-
-        if self.ship.is_annihilated and self.ship.lives_left > 0:
-            self.__repeat_wave()
 
         self.__remove_annihilated_aliens()
         self.items.update()
@@ -94,6 +102,11 @@ class Aliens(GameGroupObject):
     def __check_aliens_screen_collision(self):
         for alien in self.items.sprites():
             if alien.detect_screen_collision():
+                return True
+
+    def __check_aliens_get_through(self):
+        for alien in self.items.sprites():
+            if alien.detect_get_through():
                 return True
 
     def __remove_annihilated_aliens(self):

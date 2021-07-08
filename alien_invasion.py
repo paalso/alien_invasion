@@ -24,7 +24,7 @@ class AlienInvasion(Game):
         self.start_ticks = 0
         self.pause_finished = False
 
-        self.state = "start"    # "game", "pause", "finish"
+        self.state = "start"    # "game", "pause", "new wave", "endgame"
         self.keydown_handlers[pygame.K_p].append(self.handle_keydown)
 
     @property
@@ -93,6 +93,9 @@ class AlienInvasion(Game):
     def update(self):
         print(self.state)
 
+        if self.state == "endgame":
+            self.__endgame()
+
         if self.state == "new wave":
             self.__start_new_wave()
 
@@ -152,34 +155,6 @@ class AlienInvasion(Game):
         if key:
             self.keyup_handlers[key].append(on_play_button.handle_keyup)
 
-    def __create_new_wave_message(self):
-
-        def on_play():
-            self.__remove_popups()
-            self.pause_finished = True
-
-        position = (self.settings.screen_width // 2 - 200,
-                    self.settings.screen_height // 2 - 100, 400, 300)
-
-        text = self.settings.msg_new_wave_text
-
-        if self.wave == 1:
-            text = text.replace("yet another", "   the first")
-        elif self.wave == 2:
-            text = text.replace("yet another", "   the second")
-
-        popup = Popup(self.settings, self.screen, *position,
-                text, colors.RED1, None, font_name=self.settings.msg_text_font,
-                font_size=self.settings.msg_text_size,
-                on_click=on_play, press_key=pygame.K_c,
-                transparent=True, centralized=False)
-
-        self.popups.append(popup)
-        self.objects.append(popup)
-
-        self.mouse_handlers.append(popup.handle_mouse_event )
-        self.keyup_handlers[pygame.K_c].append(popup.handle_keyup)
-
     def __start_new_wave(self):
             if not self.start_ticks:
                 self.start_ticks = pygame.time.get_ticks()
@@ -193,3 +168,44 @@ class AlienInvasion(Game):
                 self.__remove_popups()
                 self.state = "game"
                 self.aliens.start_new_wave()
+
+    def __endgame(self):
+        self.__create_endgame_message()
+
+    def __create_endgame_message(self):
+
+        text = self.settings.msg_endgame_text
+        self.__create_message(text, 240, 120, 470, 300)
+
+    def __create_new_wave_message(self):
+
+        text = self.settings.msg_new_wave_text
+
+        if self.wave == 1:
+            text = text.replace("yet another", "   the first")
+        elif self.wave == 2:
+            text = text.replace("yet another", "   the second")
+
+        self.__create_message(text, 200, 100, 400, 300)
+
+    def __create_message(self, text, left_shift, up_shift, width, height):
+
+        def on_play():
+            self.__remove_popups()
+            self.pause_finished = True
+
+        position = (self.settings.screen_width // 2 - left_shift,
+                    self.settings.screen_height // 2 - up_shift,
+                    width, height)
+
+        popup = Popup(self.settings, self.screen, *position,
+                text, colors.RED1, None, font_name=self.settings.msg_text_font,
+                font_size=self.settings.msg_text_size,
+                on_click=on_play, press_key=pygame.K_c,
+                transparent=True, centralized=False)
+
+        self.popups.append(popup)
+        self.objects.append(popup)
+
+        self.mouse_handlers.append(popup.handle_mouse_event )
+        self.keyup_handlers[pygame.K_c].append(popup.handle_keyup)

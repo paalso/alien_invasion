@@ -8,8 +8,8 @@ class Settings():
         """Инициализирует настройки игры."""
         # Screen parameters
         self.background = "images/star_space.jpg"
-        self.screen_width = 600
-        self.screen_height = 400
+        self.screen_width = 550
+        self.screen_height = 350
         self.bg_color = 15, 20, 25
 
         # Spaceship parameters
@@ -78,3 +78,9 @@ class Settings():
         self.msg_new_wave_text = \
             "You have repelled yet another Alien Wave. " + \
             "But the next one, even more dangerous and ruthless, is coming..."
+
+        self.msg_endgame_text = \
+            "You fought bravely        " + \
+            "But the enemy defeated us " + \
+            "Now the Earth is under the rule of the evil aliens        " + \
+            "For ever and ever..."

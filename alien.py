@@ -90,3 +90,6 @@ class Alien(GameObject, pygame.sprite.Sprite):
 
     def detect_screen_collision(self):
         return self.right >= self.settings.screen_width or self.left <= 0
+
+    def detect_get_through(self):
+        return self.bottom >= self.settings.screen_height
