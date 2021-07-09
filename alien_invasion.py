@@ -104,8 +104,8 @@ class AlienInvasion(Game):
 
         if self.state == "slides":
             self.background.set_image(self.slides[self.slides_counter])
-            self.slides_counter += 1
             pygame.time.delay(int(self.settings.slide_delay * 1000))
+            self.slides_counter += 1
             if self.slides_counter == len(self.slides):
                 self.exit_game()
 
