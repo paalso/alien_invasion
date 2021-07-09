@@ -1,4 +1,4 @@
-import os, random, time
+import os, random, time, pathlib
 import pygame
 import game.colors as colors
 from game.game import Game
@@ -173,7 +173,7 @@ class AlienInvasion(Game):
             self.state = "slides"
             self.__clear_background()
             self.slides_counter = 0
-            self.slides = ["{}{}".format(self.settings.slides_directory, slide)
+            self.slides = [pathlib.Path(self.settings.slides_directory, slide)
                     for slide in os.listdir(self.settings.slides_directory)]
             random.shuffle(self.slides)
 

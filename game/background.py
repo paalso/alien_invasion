@@ -1,4 +1,4 @@
-import pygame
+import pygame, pathlib
 import settings
 from game.game_object import GameObject
 
@@ -7,9 +7,7 @@ class Background(GameObject):
 
     def __init__(self, settings, screen):
         super().__init__(settings, screen)
-
         self.set_image(self.settings.background)
-
         self.rect = self.image.get_rect()
 
     def set_image(self, image_file):

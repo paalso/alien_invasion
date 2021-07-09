@@ -1,4 +1,5 @@
 import game.colors as colors
+from pathlib import Path
 
 
 class Settings():
@@ -6,26 +7,31 @@ class Settings():
 
     def __init__(self):
         """Инициализирует настройки игры."""
+        assets_path = Path(Path.cwd(), "assets")
+        images_path = Path(assets_path, "images")
+        sounds_path = Path(assets_path, "sounds")
+        fonts_path = Path(assets_path, "fonts")
+
         # Screen parameters
-        self.background = "assets/images/star_space.jpg"
+        self.background = Path(images_path, "star_space.jpg")
         self.screen_width = 550
         self.screen_height = 350
         self.bg_color = 15, 20, 25
 
         # Spaceship parameters
-        self.ship_img = "assets/images/ship.png"
+        self.ship_img = Path(images_path, "ship.png")
         self.start_lives = 1
         self.ship_width = 50
         self.ship_height = int(self.ship_width * 1.24)
         self.ship_speed = 8
         self.ship_moves_per_bang_frame = 1
         self.ship_bang_inc_quotient = 2
-        self.bang_sound = "assets/sounds/bang_ship.mp3"
-        self.bang_images = "assets/images/bang_ship"
+        self.bang_sound = Path(sounds_path, "bang_ship.mp3")
+        self.bang_images = Path(images_path, "bang_ship")
 
         # Projectile parameters
-        self.projectile_img = "assets/images/projectile.png"
-        self.projectile_launch_sound = "assets/sounds/launch.mp3"
+        self.projectile_img = Path(images_path, "projectile.png")
+        self.projectile_launch_sound = Path(sounds_path, "launch.mp3")
         self.projectile_speed = 0.7 * self.ship_speed
         self.projectile_length = 15
         self.projectile_width = 5
@@ -33,8 +39,8 @@ class Settings():
         self.projectiles_allowed = 3
 
         # Alien Ship parameters
-        self.alien_ship_img = "assets/images/aliens_ship.png"
-        self.alien_bang_sound = "assets/sounds/bang_alien.mp3"
+        self.alien_ship_img = Path(images_path, "aliens_ship.png")
+        self.alien_bang_sound = Path(sounds_path, "bang_alien.mp3")
         self.alien_ship_width = 75
         self.alien_ship_height = int(self.alien_ship_width * 0.75)
         self.alien_speed = 0.20 * self.ship_speed
@@ -58,20 +64,20 @@ class Settings():
                 self.screen_width // 2, self.screen_height // 2, 150, 40
         self.button_text_color = colors.WHITE
         self.button_text_font = None
-        self.button_text_font = "assets/fonts/Alenia.ttf"
-        self.button_text_font = "assets/fonts/panicbuttonbb_reg.ttf"
+        self.button_text_font = Path(fonts_path, "Alenia.ttf")  # ?
+        self.button_text_font = Path(fonts_path, "panicbuttonbb_reg.ttf")
         self.button_text_size = 30
         self.button_normal_back_color = colors.GREEN
         self.button_hover_back_color = colors.GREEN3
         self.button_pressed_back_color = colors.GREEN2
 
         self.info_text_color = colors.RED3
-        self.info_text_font = "assets/fonts/Alien.ttf"
+        self.info_text_font = Path(fonts_path, "Alien.ttf")
         self.info_text_size = int(0.3 * self.ship_height)
 
         self.msg_new_wave_delay = 3
         self.msg_text_color = colors.RED2
-        self.msg_text_font = "assets/fonts/Alien.ttf"
+        self.msg_text_font = Path(fonts_path, "Alien.ttf")
         self.msg_text_font = None
         self.msg_text_size = int(0.6 * self.ship_height)
         self.msg_new_wave_text = \
@@ -86,4 +92,5 @@ class Settings():
             "For ever and ever..."
 
         self.slides_directory = "assets/images/slides/"
+        self.slides_directory = Path(images_path, "slides")
         self.slide_delay = 1.5

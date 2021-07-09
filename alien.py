@@ -1,4 +1,4 @@
-import pygame, os
+import pygame, os, pathlib
 from game.game_object import GameObject
 
 
@@ -7,8 +7,8 @@ class Alien(GameObject, pygame.sprite.Sprite):
     fleet_direction = 1   # to the right by default
     speed_increase_factor = 1
     drop_speed_increase_factor = 1
-    bang_sound = "assets/sounds/bang_alien.mp3"
-    bang_images = "assets/images/bang_alien"
+    bang_sound = pathlib.Path("assets", "sounds", "bang_alien.mp3")
+    bang_images = pathlib.Path("assets", "images", "bang_alien")
     bang_images_number = len(os.listdir(bang_images))
 
     def __init__(self, settings, screen):
@@ -75,10 +75,9 @@ class Alien(GameObject, pygame.sprite.Sprite):
                 Alien.hits_counter += 1
                 return
 
-            image_file =  "{}/{}.png".format(
-                    Alien.bang_images,
-                    self.bang_frames_counter // \
-                    self.settings.alien_moves_per_bang_frame)
+            image_file =  pathlib.Path(Alien.bang_images,
+                    "{}.png".format(str(self.bang_frames_counter // \
+                    self.settings.alien_moves_per_bang_frame)))
 
             self.image = pygame.transform.scale(
                 pygame.image.load(image_file),

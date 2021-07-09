@@ -1,4 +1,4 @@
-import pygame, os
+import pygame, os, pathlib
 from game.game_object import GameObject
 
 
@@ -64,10 +64,15 @@ class Ship(GameObject):
                 self.lives_left -= 1
                 return
 
-            image_file =  "{}/{}.png".format(
-                    self.settings.bang_images,
-                    str(self.bang_frames_counter // \
-                    self.settings.ship_moves_per_bang_frame))
+            image_file =  pathlib.Path(self.settings.bang_images,
+                    "{}.png".format(str(self.bang_frames_counter // \
+                    self.settings.ship_moves_per_bang_frame)))
+
+##            image_file =  "{}/{}.png".format(
+##                    self.settings.bang_images,
+##                    str(self.bang_frames_counter // \
+##                    self.settings.ship_moves_per_bang_frame))
+
 
             self.image = pygame.transform.scale(
                 pygame.image.load(image_file),
