@@ -1,6 +1,6 @@
 import pygame
 import settings
-from game_object import GameObject
+from game.game_object import GameObject
 
 
 class Background(GameObject):

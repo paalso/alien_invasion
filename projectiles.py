@@ -1,6 +1,6 @@
 import pygame
 
-from game_group_object import GameGroupObject
+from game.game_group_object import GameGroupObject
 from ship import Ship
 from projectile import Projectile
 from alien import Alien

@@ -1,5 +1,5 @@
 import pygame, os
-from game_object import GameObject
+from game.game_object import GameObject
 
 
 class Alien(GameObject, pygame.sprite.Sprite):
@@ -7,8 +7,8 @@ class Alien(GameObject, pygame.sprite.Sprite):
     fleet_direction = 1   # to the right by default
     speed_increase_factor = 1
     drop_speed_increase_factor = 1
-    bang_sound = "sounds/bang_alien.mp3"
-    bang_images = "images/bang_alien"
+    bang_sound = "assets/sounds/bang_alien.mp3"
+    bang_images = "assets/images/bang_alien"
     bang_images_number = len(os.listdir(bang_images))
 
     def __init__(self, settings, screen):

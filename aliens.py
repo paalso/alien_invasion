@@ -1,8 +1,8 @@
 import pygame
 
-from game_group_object import GameGroupObject
+from game.game_group_object import GameGroupObject
+from game.text_object import TextObject
 from alien import Alien
-from text_object import TextObject
 
 
 class Aliens(GameGroupObject):

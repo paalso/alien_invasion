@@ -1,17 +1,16 @@
 import os, random, time
 import pygame
-import colors
+import game.colors as colors
+from game.game import Game
+from game.background import Background
+from game.button import Button
+from game.popup import Popup
 from settings import Settings
-from game import Game
-from background import Background
 from info_panel import InfoPanel
-from button import Button
 from ship import Ship
 from alien import Alien
 from aliens import Aliens
 from projectiles import Projectiles
-
-from popup import Popup
 
 
 def empty_func():

@@ -1,6 +1,6 @@
 import pygame
 import pygame.freetype
-from game_rect_object import GameRectObject
+from game.game_rect_object import GameRectObject
 
 EMPTY_COLOR = (0, 0, 0)
 

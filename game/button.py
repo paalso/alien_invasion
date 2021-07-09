@@ -1,8 +1,7 @@
 import pygame
 
-from game_rect_object import GameRectObject
-from text_object import TextObject
-# from settings import Settings
+from game.game_rect_object import GameRectObject
+from game.text_object import TextObject
 
 
 class Button(GameRectObject):   # GameObject ?

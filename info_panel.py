@@ -1,7 +1,7 @@
 import pygame
 
-from game_rect_object import GameRectObject
-from text_object import TextObject
+from game.game_rect_object import GameRectObject
+from game.text_object import TextObject
 from settings import Settings
 
 empty_color = (0, 0, 0)

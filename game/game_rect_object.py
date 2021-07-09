@@ -1,5 +1,5 @@
 import pygame
-from game_object import GameObject
+from game.game_object import GameObject
 
 class GameRectObject(GameObject):
 
