@@ -24,7 +24,7 @@ class AlienInvasion(Game):
         self.start_ticks = 0
         self.pause_finished = False
 
-        self.state = "start"    # "game", "pause", "new wave", "endgame"
+        self.state = "start" # "game", "pause", "new wave", "endgame", "slides"
         self.keydown_handlers[pygame.K_p].append(self.handle_keydown)
 
     @property
@@ -161,10 +161,17 @@ class AlienInvasion(Game):
             self.state = "game"
             self.aliens.start_new_wave()
 
-        self.__delay(action, self.settings.msg_new_wave_delay)
+        self.__delay(self.__create_new_wave_message, action,
+                    self.settings.msg_new_wave_delay)
 
     def __endgame(self):
-        self.__create_endgame_message()
+
+        def action():
+            pygame.quit()
+            sys.exit()
+
+        self.__delay(self.__create_endgame_message, action,
+                    self.settings.msg_endgame_delay)
 
     def __create_endgame_message(self):
 
@@ -204,10 +211,10 @@ class AlienInvasion(Game):
         self.mouse_handlers.append(popup.handle_mouse_event )
         self.keyup_handlers[pygame.K_c].append(popup.handle_keyup)
 
-    def __delay(self, action, duration):        # ?
+    def __delay(self, message, action, duration):        # ?
         if not self.start_ticks:
             self.start_ticks = pygame.time.get_ticks()
-            self.__create_new_wave_message()
+            message()
 
         elif self.pause_finished or self.start_ticks >= 0 and \
                 pygame.time.get_ticks() - self.start_ticks > \

@@ -74,11 +74,11 @@ class Settings():
         self.msg_text_font = "fonts/Alien.ttf"
         self.msg_text_font = None
         self.msg_text_size = int(0.6 * self.ship_height)
-
         self.msg_new_wave_text = \
             "You have repelled yet another Alien Wave. " + \
             "But the next one, even more dangerous and ruthless, is coming..."
 
+        self.msg_endgame_delay = 2
         self.msg_endgame_text = \
             "You fought bravely        " + \
             "But the enemy defeated us " + \
