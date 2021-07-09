@@ -183,6 +183,14 @@ class AlienInvasion(Game):
     def __create_endgame_message(self):
 
         text = self.settings.msg_endgame_text
+
+        if self.wave == 1:
+            text = text.replace(
+                    "fought bravely        But", "didn't fight at all, so")
+        elif self.wave < 3:
+            text = text.replace(
+                    "fought bravely        But", "hardly fought, so       ")
+
         self.__create_message(text, 240, 120, 470, 300)
 
     def __create_new_wave_message(self):

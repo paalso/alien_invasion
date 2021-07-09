@@ -5,12 +5,11 @@ from collections import defaultdict
 class Game:
     def __init__(self, settings, caption, frame_rate=60):
         self.settings = settings
-        # self.background_image = pygame.image.load(back_image_filename)
         self.frame_rate = frame_rate
         self.game_over = False
         self.objects = []
-        pygame.mixer.init(44100, -16, 2, 4096)
         pygame.init()
+        pygame.mixer.init(44100, -16, 2, 4096)
         pygame.font.init()
         self.screen = pygame.display.set_mode(
                 (self.settings.screen_width, self.settings.screen_height))

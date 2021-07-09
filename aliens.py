@@ -34,8 +34,6 @@ class Aliens(GameGroupObject):
                 self.__create_alien(i, j, distance_x_between_aliens)
 
     def start_new_wave(self):
-        print("Another aliens wave destoyed!")
-        print("But next even more dangerous wave is approaching!")
         self.ship.lives_left += 1
         self.counter += 1
         Alien.reset_speed_increase_factors(
@@ -132,7 +130,6 @@ class Aliens(GameGroupObject):
             alien.rect.y = alien.y
 
     def __repeat_wave(self):
-        print("Your was killed")
         Alien.reset_speed_increase_factors(
                 self.settings.new_wave_alien_speed_increase_factor,
                 self.settings.new_wave_drop_speed_increase_factor,
