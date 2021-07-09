@@ -1,4 +1,5 @@
-import sys, pygame, time
+import os, random, time
+import pygame
 import colors
 from settings import Settings
 from game import Game
@@ -13,6 +14,10 @@ from projectiles import Projectiles
 from popup import Popup
 
 
+def empty_func():
+    pass
+
+
 class AlienInvasion(Game):
     def __init__(self):
         super().__init__(Settings(), 'Alien Invasion')
@@ -21,11 +26,11 @@ class AlienInvasion(Game):
         self.popups = []  # ?
         self.create_objects()
 
-        self.start_ticks = 0
-        self.pause_finished = False
-
         self.state = "start" # "game", "pause", "new wave", "endgame", "slides"
         self.keydown_handlers[pygame.K_p].append(self.handle_keydown)
+
+        self.start_ticks = 0
+        self.pause_finished = False
 
     @property
     def lives_left(self):
@@ -91,13 +96,18 @@ class AlienInvasion(Game):
         self.objects.append(self.projectiles)
 
     def update(self):
-        print(self.state)
-
         if self.state == "endgame":
             self.__endgame()
 
         if self.state == "new wave":
             self.__start_new_wave()
+
+        if self.state == "slides":
+            self.background.set_image(self.slides[self.slides_counter])
+            self.slides_counter += 1
+            pygame.time.delay(int(self.settings.slide_delay * 1000))
+            if self.slides_counter == len(self.slides):
+                self.exit_game()
 
         if self.state != "game":
             return
@@ -106,14 +116,8 @@ class AlienInvasion(Game):
 
     def draw(self):
         if self.state == "start":
-            self.background.draw()  # вынести выше?
-            self.__draw_menu()
-            return
-
-        elif self.state == "finish":
             self.background.draw()
-            text = TextObject(100, 100, "You lose :(", colors.RED1, None, 50)
-            text.draw(self.screen)
+            self.__draw_menu()
             return
 
         super().draw()
@@ -161,17 +165,21 @@ class AlienInvasion(Game):
             self.state = "game"
             self.aliens.start_new_wave()
 
-        self.__delay(self.__create_new_wave_message, action,
-                    self.settings.msg_new_wave_delay)
+        self.__delay(self.settings.msg_new_wave_delay,
+                    self.__create_new_wave_message, action,)
 
     def __endgame(self):
 
         def action():
-            pygame.quit()
-            sys.exit()
+            self.state = "slides"
+            self.__clear_background()
+            self.slides_counter = 0
+            self.slides = ["{}{}".format(self.settings.slides_directory, slide)
+                    for slide in os.listdir(self.settings.slides_directory)]
+            random.shuffle(self.slides)
 
-        self.__delay(self.__create_endgame_message, action,
-                    self.settings.msg_endgame_delay)
+        self.__delay(self.settings.msg_new_wave_delay,
+                    self.__create_endgame_message, action)
 
     def __create_endgame_message(self):
 
@@ -211,7 +219,7 @@ class AlienInvasion(Game):
         self.mouse_handlers.append(popup.handle_mouse_event )
         self.keyup_handlers[pygame.K_c].append(popup.handle_keyup)
 
-    def __delay(self, message, action, duration):        # ?
+    def __delay(self, duration, message=empty_func, action=empty_func):        # ?
         if not self.start_ticks:
             self.start_ticks = pygame.time.get_ticks()
             message()
@@ -223,3 +231,8 @@ class AlienInvasion(Game):
             self.start_ticks = 0
             self.__remove_popups()
             action()
+
+    def __clear_background(self, save_object_instance=Background):
+        for o in self.objects.copy():
+            if not isinstance(o, save_object_instance):
+                self.objects.remove(o)

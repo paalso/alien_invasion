@@ -38,7 +38,7 @@ class Settings():
         self.alien_ship_width = 75
         self.alien_ship_height = int(self.alien_ship_width * 0.75)
         self.alien_speed = 0.20 * self.ship_speed
-        self.fleet_drop_speed = 10  # 10
+        self.fleet_drop_speed = 50  # 10
         self.alien_moves_per_bang_frame = 3
         self.alien_bang_inc_quotient = 1.5
 
@@ -78,9 +78,12 @@ class Settings():
             "You have repelled yet another Alien Wave. " + \
             "But the next one, even more dangerous and ruthless, is coming..."
 
-        self.msg_endgame_delay = 2
+        self.msg_endgame_delay = 2.5    # 5
         self.msg_endgame_text = \
             "You fought bravely        " + \
             "But the enemy defeated us " + \
             "Now the Earth is under the rule of the evil aliens        " + \
             "For ever and ever..."
+
+        self.slides_directory = "images/slides/"
+        self.slide_delay = 1.5

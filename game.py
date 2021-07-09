@@ -35,8 +35,7 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT \
             or event.type == pygame.KEYDOWN and event.key in self.quit_keys:
-                pygame.quit()
-                sys.exit()
+                self.exit_game()
             elif event.type == pygame.KEYDOWN:
                 for handler in self.keydown_handlers[event.key]:
                     handler(event.key)
@@ -57,3 +56,7 @@ class Game:
 
             pygame.display.update()
             self.clock.tick(self.frame_rate)
+
+    def exit_game(self):
+        pygame.quit()
+        sys.exit()
