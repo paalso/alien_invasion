@@ -14,8 +14,8 @@ class Settings():
 
         # Screen parameters
         self.background = Path(images_path, "star_space.jpg")
-        self.screen_width = 550
-        self.screen_height = 350
+        self.screen_width = 960
+        self.screen_height = 720
         self.bg_color = 15, 20, 25
 
         # Spaceship parameters
@@ -44,7 +44,7 @@ class Settings():
         self.alien_ship_width = 75
         self.alien_ship_height = int(self.alien_ship_width * 0.75)
         self.alien_speed = 0.20 * self.ship_speed
-        self.fleet_drop_speed = 50  # 10
+        self.fleet_drop_speed = 10
         self.alien_moves_per_bang_frame = 3
         self.alien_bang_inc_quotient = 1.5
 
@@ -63,8 +63,7 @@ class Settings():
         self.button_position = \
                 self.screen_width // 2, self.screen_height // 2, 150, 40
         self.button_text_color = colors.WHITE
-        self.button_text_font = None
-        self.button_text_font = Path(fonts_path, "Alenia.ttf")  # ?
+        self.button_text_font = Path(fonts_path, "Alenia.ttf")
         self.button_text_font = Path(fonts_path, "panicbuttonbb_reg.ttf")
         self.button_text_size = 30
         self.button_normal_back_color = colors.GREEN
@@ -75,7 +74,7 @@ class Settings():
         self.info_text_font = Path(fonts_path, "Alien.ttf")
         self.info_text_size = int(0.3 * self.ship_height)
 
-        self.msg_new_wave_delay = 3
+        self.msg_new_wave_delay = 4
         self.msg_text_color = colors.RED2
         self.msg_text_font = Path(fonts_path, "Alien.ttf")
         self.msg_text_font = None
@@ -84,12 +83,30 @@ class Settings():
             "You have repelled yet another Alien Wave. " + \
             "But the next one, even more dangerous and ruthless, is coming..."
 
-        self.msg_endgame_delay = 2.5    # 5
+        self.msg_endgame_delay = 5   # 5
         self.msg_endgame_text = \
             "You fought bravely        " + \
             "But the enemy defeated us " + \
             "Now the Earth is under the rule of the evil aliens        " + \
             "For ever and ever..."
+
+        self.help_position = \
+                self.screen_width // 2, self.screen_height // 2, 400, 320
+        self.help_text_color = colors.BROWN
+        self.help_back_color = colors.LIGHTSTEELBLUE
+        self.help_text_size = 25
+        self.help_font = "courier"
+        self.help_text = \
+            "       Game Controls       " + \
+            "      ===============      " + \
+            "F1         Help            " + \
+            "S          Start           " + \
+            "Left /                     " + \
+            "Right      Ship Movement   " + \
+            "Space      Ship Fire       " + \
+            "P          Pause           " + \
+            "C          Continue        " + \
+            "Q          Quit          "
 
         self.slides_directory = "assets/images/slides/"
         self.slides_directory = Path(images_path, "slides")

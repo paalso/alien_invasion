@@ -21,12 +21,14 @@ class AlienInvasion(Game):
     def __init__(self):
         super().__init__(Settings(), 'Alien Invasion')
         self.quit_keys = [pygame.K_q]
-        self.menu_buttons = []  # ?
-        self.popups = []  # ?
+        self.menu_buttons = []
+        self.popups = []
         self.create_objects()
 
-        self.state = "start" # "game", "pause", "new wave", "endgame", "slides"
+        # "start", "game", "pause", "new wave", "endgame", "slides"
+        self.state = "start"
         self.keydown_handlers[pygame.K_p].append(self.handle_keydown)
+        self.keydown_handlers[pygame.K_F1].append(self.handle_keydown)
 
         self.start_ticks = 0
         self.pause_finished = False
@@ -54,6 +56,9 @@ class AlienInvasion(Game):
         if self.state == "game" and key == pygame.K_p:
             self.state = "pause"
             self.__create_on_play_button("CONTINUE", pygame.K_c)
+        elif self.state == "game" and key == pygame.K_F1:
+            self.state = "pause"
+            self.__create_help_window()
 
     def create_objects(self):
         self.create_background()
@@ -68,7 +73,14 @@ class AlienInvasion(Game):
         self.objects.append(self.background)
 
     def create_menu(self):  # ?!
-        self.__create_on_play_button("START", pygame.K_s)
+
+        def on_play():
+            self.__remove_menu()
+            self.state = "game"
+
+        self.__create_menu_button(0, "HELP", pygame.K_h, self.__create_help_window)
+        self.__create_menu_button(1, "START", pygame.K_s, on_play)
+        self.__create_menu_button(2, "QUIT", pygame.K_q, self.exit_game)
 
     def create_info_panel(self):
         self.info_panel = InfoPanel(self.settings, self.screen, self)
@@ -117,12 +129,17 @@ class AlienInvasion(Game):
         if self.state == "start":
             self.background.draw()
             self.__draw_menu()
+            self.__draw_popups()
             return
 
         super().draw()
 
     def __draw_menu(self):
         for b in self.menu_buttons:
+            b.draw()
+
+    def __draw_popups(self):
+        for b in self.popups:
             b.draw()
 
     def __remove_menu(self):
@@ -138,18 +155,29 @@ class AlienInvasion(Game):
                 key = o.press_key
                 self.keyup_handlers[key].remove(o.handle_keyup)
                 self.mouse_handlers.remove(o.handle_mouse_event )
-
         some_objects.clear()
 
+    # --- Buttons ----------------------------------
+    # Refactor __create_on_play_button && __create_menu_button
     def __create_on_play_button(self, text, key=None):
 
         def on_play():
             self.__remove_menu()
             self.state = "game"
 
+        color = self.settings.button_text_color
+        back_colors = (self.settings.button_normal_back_color,
+                        self.settings.button_hover_back_color,
+                        self.settings.button_pressed_back_color)
+        font_name = self.settings.button_text_font
+        font_size = self.settings.button_text_size
+
+        x, y, w, h = self.settings.button_position
+
         on_play_button = Button(self.settings, self.screen,
-                *self.settings.button_position, text, on_click=on_play,
-                press_key=key, centralized=True, text_centralize=True)
+                x, y, w, h, text, color, back_colors, font_name, font_size,
+                on_click=on_play, press_key=key,
+                centralized=True, text_centralize=True)
 
         self.menu_buttons.append(on_play_button)
         self.objects.append(on_play_button)
@@ -157,6 +185,32 @@ class AlienInvasion(Game):
 
         if key:
             self.keyup_handlers[key].append(on_play_button.handle_keyup)
+
+    def __create_menu_button(self, i, text, key=None, on_play=empty_func):
+
+        color = self.settings.button_text_color
+        back_colors = (self.settings.button_normal_back_color,
+                        self.settings.button_hover_back_color,
+                        self.settings.button_pressed_back_color)
+        font_name = self.settings.button_text_font
+        font_size = self.settings.button_text_size
+
+        x, y, w, h = self.settings.button_position
+        y = y + 2 * h * (i - 1)
+
+        on_play_button = Button(self.settings, self.screen,
+                x, y, w, h, text, color, back_colors, font_name, font_size,
+                on_click=on_play, press_key=key,
+                centralized=True, text_centralize=True)
+
+        self.menu_buttons.append(on_play_button)
+        self.objects.append(on_play_button)
+        self.mouse_handlers.append(on_play_button.handle_mouse_event )
+
+        if key:
+            self.keyup_handlers[key].append(on_play_button.handle_keyup)
+
+    # ----------------------------------------------
 
     def __start_new_wave(self):
 
@@ -180,6 +234,7 @@ class AlienInvasion(Game):
         self.__delay(self.settings.msg_new_wave_delay,
                     self.__create_endgame_message, action)
 
+    # --- Messages ----------------------------------
     def __create_endgame_message(self):
 
         text = self.settings.msg_endgame_text
@@ -204,6 +259,7 @@ class AlienInvasion(Game):
 
         self.__create_message(text, 200, 100, 400, 300)
 
+
     def __create_message(self, text, left_shift, up_shift, width, height):
 
         def on_play():
@@ -225,8 +281,35 @@ class AlienInvasion(Game):
 
         self.mouse_handlers.append(popup.handle_mouse_event )
         self.keyup_handlers[pygame.K_c].append(popup.handle_keyup)
+    # -----------------------------------------------
 
-    def __delay(self, duration, message=empty_func, action=empty_func):        # ?
+    # --- Help window -------------------------------
+    def __create_help_window(self):
+
+        def on_play():
+            self.__remove_popups()
+            self.pause_finished = True
+            if self.state != "start":
+                self.state = "game"
+
+        popup = Popup(self.settings, self.screen,
+                *self.settings.help_position,
+                text=self.settings.help_text,
+                color=self.settings.help_text_color,
+                back_color=self.settings.help_back_color,
+                font_name=self.settings.help_font,
+                font_size=self.settings.help_text_size,
+                on_click=on_play, press_key=pygame.K_c,
+                transparent=False, centralized=True)
+
+        self.popups.append(popup)
+        self.objects.append(popup)
+
+        self.mouse_handlers.append(popup.handle_mouse_event )
+        self.keyup_handlers[pygame.K_c].append(popup.handle_keyup)
+    # -----------------------------------------------
+
+    def __delay(self, duration, message=empty_func, action=empty_func): # ?
         if not self.start_ticks:
             self.start_ticks = pygame.time.get_ticks()
             message()

@@ -6,11 +6,15 @@ from game.text_object import TextObject
 
 class Button(GameRectObject):   # GameObject ?
     def __init__(self, settings, screen, x, y, w, h, text,
+                color, back_colors, font_name, font_size,
                 on_click=lambda x: None, press_key=None,
                 padding=0, centralized=False, text_centralize=False):
         super().__init__(settings, screen, x, y, w, h)
+
         self.text_centralize = text_centralize
         self.text_content = text
+        self.on_click = on_click
+        self.press_key = press_key
 
         # if centralized center = x, y else topleft = x, y
         if centralized:
@@ -19,18 +23,17 @@ class Button(GameRectObject):   # GameObject ?
             self.rect.topleft = (self.left, self.top)
 
         self.state = 'normal'
-        self.on_click = on_click
-        self.press_key = press_key
 
         # text in the center of the button if text_centralize
         text_x, text_y = \
                 (self.width // 2, self.height // 2) if text_centralize \
                 else (padding, padding)
         self.text = TextObject(
-                text_x, text_y, text,
-                self.settings.button_text_color,
-                self.settings.button_text_font,
-                self.settings.button_text_size)
+                text_x, text_y, text, color, font_name, font_size)
+
+        button_normal_back_color, \
+        button_hover_back_color, \
+        button_pressed_back_color = back_colors
 
         self.back_colors = \
                 dict(
