@@ -4,7 +4,11 @@ The idea of the project originates from the **"Python crash course"** by ***Eric
 Some elements of the architecture and game logic are taken from the book. But overall, the implementation is quite different from the author's.
 Also, as compared to the author's, the functionality and interface are expanded.
 
-The game is implemented using the [Pygame](https://en.wikipedia.org/wiki/Pygame) platform, so its launch requires the installation of this library.
+The game is implemented using the [Pygame](https://en.wikipedia.org/wiki/Pygame) platform, so its launch requires [installation of this library](https://www.pygame.org/wiki/GettingStarted).
+
+Launch the game:
+
+`puthon3 run.py`
 
 ## Game controls:
 
